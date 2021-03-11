@@ -3,6 +3,7 @@
 # db
 db/sample_data.sql
 /ignore
+/src/api
 
 # dependencies
 /node_modules
