@@ -9,7 +9,7 @@ class Quote extends React.Component {
     constructor(){
       super();
       this.baseURL = "http://localhost/Quotables/src/api/";
-      this.uid = 5;
+      this.uid = 1;
       this.state = { isLoading : true, quotesdata : [], allTags : [] };
     }
     
