@@ -35,26 +35,25 @@ class Profile extends React.Component {
           <div>Loading...</div>
         );
       }
-      else{
-        if(userData.hasOwnProperty('Error') ){
-          return(
-            <h2>"Oops! Some error Occured! Try again after sometime"</h2>
-          );
-        }
-        return (
-          <div>
-            <h1> Profile Page </h1>
-            <h2>{userData.username}</h2>
-            <h3>{userData.bio}</h3>
-            <div>
-              Quotes {userData.quotesCount}
-            </div>
-            <div>
-              Tags {userData.tagsCount}
-            </div>
-          </div>
+
+      if(userData.hasOwnProperty('Error') ){
+        return(
+          <h2>"Oops! Some error Occured! Try again after sometime"</h2>
         );
       }
+      return (
+        <div>
+          <h1> Profile Page </h1>
+          <h2>{userData.username}</h2>
+          <h3>{userData.bio}</h3>
+          <div>
+            Quotes {userData.quotesCount}
+          </div>
+          <div>
+            Tags {userData.tagsCount}
+          </div>
+        </div>
+      );
     }
   }
   

@@ -1,8 +1,8 @@
 <?php 
 
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,PATCH,OPTIONS');
 header('Content-Type: application/json');
+
 error_reporting(0);
 try{
     include("dbconnect.php");
