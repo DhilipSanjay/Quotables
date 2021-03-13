@@ -17,6 +17,7 @@ class Quote extends React.Component {
       this._isMounted = true;
       const q = await fetch(this.baseURL + 'fetchQuotes.php?uid=' + this.uid);
       const qjsonData = await q.json();
+      console.log(qjsonData);
       const t = await fetch(this.baseURL + 'fetchTags.php?uid=' + this.uid);
       const tjsonData = await t.json();
       
@@ -40,7 +41,12 @@ class Quote extends React.Component {
         );
       }
       else{
-        console.log(allTags)
+        // console.log(allTags);
+        if(quotesdata.hasOwnProperty('Error') || allTags.hasOwnProperty('Error') ){
+          return(
+            <h2>"Oops! Some error Occured! Try again after sometime"</h2>
+          );
+        }
         return (
         <div>
           <h1> Quotes Page </h1>

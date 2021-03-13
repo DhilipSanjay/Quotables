@@ -36,6 +36,11 @@ class Profile extends React.Component {
         );
       }
       else{
+        if(userData.hasOwnProperty('Error') ){
+          return(
+            <h2>"Oops! Some error Occured! Try again after sometime"</h2>
+          );
+        }
         return (
           <div>
             <h1> Profile Page </h1>
