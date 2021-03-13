@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Redirect} from 'react-router-dom';
-import { PostData } from '../services/postData';
+import Auth from '../services/auth';
 
 class Login extends React.Component{
     constructor(props){
@@ -9,7 +9,6 @@ class Login extends React.Component{
         this.state = {
             email: '',
             password: '',
-            redirect: false
         }
         this.login = this.login.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -17,19 +16,9 @@ class Login extends React.Component{
 
     login(){
         if(this.state.email && this.state.password){
-            PostData('login.php', this.state).then((result) => {
-                let responseJSON = result;
-                
-                if(responseJSON.userData){
-                    localStorage.setItem('userData', responseJSON);
-                    console.log(responseJSON);
-                    this.setState({redirect: true});
-                }
-                else{
-                    console.log(responseJSON);
-                }
-            });
-
+            if(Auth.login(this.state)){
+                this.setState({redirect: true});
+            }
         }
         else{
             console.log("Fill both email and password text boxes");
@@ -43,15 +32,9 @@ class Login extends React.Component{
 
     render() {
         
-        if(this.state.redirect){
-            return<Redirect to={'/quotes'} />;
-        }
-
-        if(localStorage.getItem('userData')){
-            return(
-                <Redirect to={'/quotes'} />
-            );
-        }
+        // if(Auth.isAuthenticated()){
+        //     this.props.history.push('/quotes');
+        // }
 
         return (
         <div>

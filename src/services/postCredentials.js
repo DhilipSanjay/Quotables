@@ -1,12 +1,11 @@
-import Auth from '../services/auth';
-
-function PostData(url, token, userData){
+export function PostCredentials(url, userData){
     let baseURL = "http://localhost/Quotables/src/api/";
+
     return new Promise((resolve, reject) => {
         return fetch(baseURL + url, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
               },
             body: JSON.stringify(userData)
         })
@@ -18,6 +17,5 @@ function PostData(url, token, userData){
             reject(error);
         });
     });
-}
 
-export default PostData;
+}

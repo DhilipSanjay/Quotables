@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Auth from '../services/auth';
 
 class Profile extends React.Component {  
   _isMounted = false;
@@ -13,12 +14,11 @@ class Profile extends React.Component {
   
   async componentDidMount(){
     this._isMounted = true;
-    const u = await fetch(this.baseURL + 'fetchUserProfile.php?uid=' + this.uid);
-    const ujsonData = await u.json();
+    const ujsonData = Auth.getLocalData();
     
     if(this._isMounted === true)
     {
-    this.setState({ isLoading : false, userData : ujsonData });
+      this.setState({ isLoading : false, userData : ujsonData });
     } 
   }
   
@@ -28,15 +28,13 @@ class Profile extends React.Component {
 
 
     render() {
-      let {isLoading, userData} = this.state;
-
-      if (isLoading){
+      if (this.state.isLoading){
         return (
           <div>Loading...</div>
         );
       }
 
-      if(userData.hasOwnProperty('Error') ){
+      if(this.state.userData){
         return(
           <h2>"Oops! Some error Occured! Try again after sometime"</h2>
         );
@@ -44,14 +42,14 @@ class Profile extends React.Component {
       return (
         <div>
           <h1> Profile Page </h1>
-          <h2>{userData.username}</h2>
-          <h3>{userData.bio}</h3>
+          {/* <h2>{this.state.userData.username}</h2>
+          <h3>{this.state.userData.bio}</h3>
           <div>
-            Quotes {userData.quotesCount}
+            Quotes {this.state.userData.quotesCount}
           </div>
           <div>
-            Tags {userData.tagsCount}
-          </div>
+            Tags {this.state.userData.tagsCount}
+          </div> */}
         </div>
       );
     }

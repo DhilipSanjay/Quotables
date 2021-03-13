@@ -1,47 +1,95 @@
 <?php 
 
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,PATCH,OPTIONS');
+header('Access-Control-Allow-Headers: Authorization, Content-type');
 header('Content-Type: application/json');
-error_reporting(0);
-try{
-    require("dbconnect.php");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
 
-    $uid = $_GET["uid"]; //this is the uid of the user currently logged in
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {    
+    return 0;    
+ }  
 
-    $quotesQuery = "SELECT qid, quote, author FROM quotes WHERE uid = " . $uid;
-    $quotesResult = mysqli_query($conn, $quotesQuery);
-    $quotesArray = array();
+include_once($_SERVER['DOCUMENT_ROOT']. '/Quotables/src/api/dbconnect.php');
+include_once($_SERVER['DOCUMENT_ROOT']. '/Quotables/src/api/auth.php');
 
-    while($row =mysqli_fetch_assoc($quotesResult))
-    {
-        $quotesArray[] = $row;
-    }
+$json = file_get_contents('php://input');
+$data = json_decode($json);
+$auth = new Auth();
 
-    for ($i = 0; $i < count($quotesArray); $i++)
-    {
-        $tagQuery = "SELECT tagid, tagname from quotes_tags natural join tags where qid = " . $quotesArray[$i]["qid"];
-        $tagResult = mysqli_query($conn, $tagQuery);
-        $tagArray = array();
+if($data){
+    $uid = $data->uid;
+    $username = $data->username;
+    $email = $data->email;
+    if($auth->verifyToken($uid, $username, $email)){
+        try{
+            $database = new Database();
+            $conn = $database->getConnection();
+        
+            $quotesQuery = "SELECT qid, quote, author FROM quotes WHERE uid = " . $uid;
+            $quotesResult = mysqli_query($conn, $quotesQuery);
+            $quotesArray = array();
+        
+            while($row =mysqli_fetch_assoc($quotesResult))
+            {
+                $quotesArray[] = $row;
+            }
 
-        while($row =mysqli_fetch_assoc($tagResult))
-        {
-            $tagArray[] = $row;
+            if(sizeof($quotesArray) > 0){
+                for ($i = 0; $i < count($quotesArray); $i++)
+                {
+                    $tagQuery = "SELECT tagid, tagname from quotes_tags natural join tags where qid = " . $quotesArray[$i]["qid"];
+                    $tagResult = mysqli_query($conn, $tagQuery);
+                    $tagArray = array();
+            
+                    while($row =mysqli_fetch_assoc($tagResult))
+                    {
+                        $tagArray[] = $row;
+                    }
+            
+                    $quotesArray[$i]["tags"] =  $tagArray;
+                }
+                $quotesJson = json_encode($quotesArray);
+            
+                echo $quotesJson;
+            }
+            else{
+                echo json_encode(
+                    array(
+                        "title"=>"Message",
+                        "message"=>"Start collecting your quotes!"
+                    )
+                );
+            }    
         }
-
-        $quotesArray[$i]["tags"] =  $tagArray;
+        
+        catch(Exception $e){
+            http_response_code(404);
+            echo json_encode(
+                array(
+                    "title"=>"Error",
+                    "error"=>"Error occurred. Try again after sometime!"
+                )
+            );
+        }
     }
-    $quotesJson = json_encode($quotesArray);
-
-    echo $quotesJson;
-    return $quotesJson;
-
+    else{
+        // http_response_code(401);
+        echo json_encode(
+            array(
+                "title"=>"Error",
+                "error"=>"Unathorized - Your token did not match the expected token."
+            )
+        );
+    }
+        
 }
-
-catch(Exception $e){
-    $error = json_encode(["Error" => "Cannot connect to the database"]);
-    print($error);
-    return $error;
+else{
+    echo json_encode(
+        array(
+            "title"=>"Error",
+            "error"=>"No request data found!"
+        )
+    );
 }
 
 ?>

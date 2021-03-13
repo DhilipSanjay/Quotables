@@ -4,7 +4,9 @@ import ReactDOM from 'react-dom';
 class SignUp extends React.Component{
     render() {
         return (
-        <div>Sign Up</div>
+        <div>
+            <h1>Sign Up</h1>
+        </div>
         );
     }
 

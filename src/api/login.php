@@ -35,7 +35,7 @@ if($data){
             );
         }
     }
-    catch(Excpetion $e){
+    catch(Exception $e){
         http_response_code(404);
         echo json_encode(
             array(
@@ -43,8 +43,7 @@ if($data){
                 "error"=>"Error occurred. Try again after sometime!"
             )
         );
-    }
-   
+    } 
 }
 
 

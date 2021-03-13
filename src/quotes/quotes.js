@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Redirect} from 'react-router-dom';
+import Auth from '../services/auth';
+import PostData from '../services/postData';
 
 import Tags from './tags.jsx';
 import AllTags from './allTags.jsx';
@@ -10,44 +12,35 @@ class Quote extends React.Component {
 
     constructor(){
       super();
-      this.state = { isLoading : true, redirect: false, quotesdata : [], allTags : [] };
-      this.fetchQuotesTags = this.fetchQuotesTags.bind(this);
+      this.state = { isLoading : false, redirect: false, quotesdata : [], allTags : [] };
     }
     
-    async fetchQuotesTags(userData) {
+    async componentDidMount() {
       this._isMounted = true;
-      const q = await fetch(this.baseURL + 'fetchQuotes.php?uid=' + this.uid);
-      const qjsonData = await q.json();
-      console.log(qjsonData);
-      const t = await fetch(this.baseURL + 'fetchTags.php?uid=' + this.uid);
-      const tjsonData = await t.json();
+      if(Auth.isAuthenticated()){
+        const token = Auth.getLocalData();
+        const qjsonData = await PostData('fetchQuotes.php', token.token , token);
+        const tjsonData = await PostData('fetchTags.php', token.token , token);
+        
+        if(this._isMounted === true)
+        {
+        this.setState({ isLoading : false, quotesdata : qjsonData, allTags : tjsonData });
+        } 
+
+      }
       
-      if(this._isMounted === true)
-      {
-      this.setState({ isLoading : false, quotesdata : qjsonData, allTags : tjsonData });
-      } 
     }
 
-    componentDidMount(){
-      const userData = localStorage.getItem('userData');
-      if(userData){
-        this.fetchQuotesTags(userData); 
-      }
-      else{
-        this.setState({redirect: true});
-      }
-    }
-    
     componentWillUnmount() {
       this._isMounted = false;
     }
 
     render() {
-      // if(this.state.redirect){
-      //   return(
-      //     <Redirect to={'/login'} />
-      //   );
-      // }
+      if(this.state.redirect){
+        return(
+          <Redirect to={'/login'} />
+        );
+      }
 
       if (this.state.isLoading){
         return (
@@ -55,7 +48,7 @@ class Quote extends React.Component {
         );
       }
         // console.log(allTags);
-      if(this.state.quotesdata.hasOwnProperty('Error') || this.state.allTags.hasOwnProperty('Message') ){
+      if(this.state.quotesdata.hasOwnProperty('Error') || this.state.quotesdata.hasOwnProperty('Message') ){
         return(
           <h2>"Oops! Some error Occured! Try again after sometime"</h2>
         );
