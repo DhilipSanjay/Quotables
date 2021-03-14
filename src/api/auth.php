@@ -16,7 +16,7 @@ class Auth{
         $this->serverName = "http://localhost";             
     }
 
-    public function getToken($uid, $username, $email){
+    public function generateToken($uid, $username, $email){
         $data = [
             'iat'  => $this->issuedAt,         // Issued at: time when the token was generated
             'iss'  => $this->serverName,       // Issuer
@@ -41,10 +41,10 @@ class Auth{
     public function verifyToken($uid, $username, $email){
         if (! preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
             // header('HTTP/1.0 400 Bad Request');
-            echo 'Token not found in request';
+            // echo 'Token not found in request';
             return false;
         }
-        
+
         $jwt = $matches[1];
         if (! $jwt) {
             // No token was able to be extracted from the authorization header

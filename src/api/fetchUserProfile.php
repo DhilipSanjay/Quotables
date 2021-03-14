@@ -1,47 +1,93 @@
 <?php 
-
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,PATCH,OPTIONS');
+header('Access-Control-Allow-Headers: Authorization, Content-type');
 header('Content-Type: application/json');
-error_reporting(0);
-try{
-   include("dbconnect.php");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
 
-   $uid = $_GET["uid"]; //this is the uid of the user currently logged in
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {    
+    return 0;    
+ }  
 
-   $userQuery = "SELECT username, email, bio FROM users WHERE uid = " . $uid;
-   $userResult = mysqli_query($conn, $userQuery);
-   $userArray = NULL;
+include_once($_SERVER['DOCUMENT_ROOT']. '/Quotables/src/api/dbconnect.php');
+include_once($_SERVER['DOCUMENT_ROOT']. '/Quotables/src/api/auth.php');
 
-   if($row = mysqli_fetch_assoc($userResult))
-   {
-      $userArray = $row;
+$json = file_get_contents('php://input');
+$data = json_decode($json);
+$auth = new Auth();
+
+if($data){
+   $uid = $data->uid;
+   $username = $data->username;
+   $email = $data->email;
+   if($auth->verifyToken($uid, $username, $email)){
+      try{
+         $database = new Database();
+         $conn = $database->getConnection();
+      
+         $userQuery = "SELECT username, email, bio FROM users WHERE uid = " . $uid;
+         $userResult = mysqli_query($conn, $userQuery);
+         $userArray = NULL;
+   
+         if($row = mysqli_fetch_assoc($userResult))
+         {
+            $userArray = $row;
+         }
+
+         $quotesCountQuery = "SELECT COUNT(*) as quotesCount FROM quotes WHERE uid = " . $uid;
+         $quotesCountResult = mysqli_query($conn, $quotesCountQuery);
+         if($row = mysqli_fetch_assoc($quotesCountResult))
+         {
+            $userArray += $row;
+         }
+
+         $tagsCountQuery = "SELECT COUNT(*) as tagsCount FROM users NATURAL JOIN tags NATURAL JOIN quotes_tags WHERE uid = " . $uid;
+         $tagsCountResult = mysqli_query($conn, $tagsCountQuery);
+         if($row = mysqli_fetch_assoc($tagsCountResult))
+         {
+            $userArray += $row;
+         }
+
+
+         if($userArray){
+            $userJson = json_encode($userArray);   
+            echo $userJson;
+         }
+         else{
+            echo json_encode(
+                  array(
+                     "title"=>"Message",
+                     "message"=>"User information not found!"
+                  )
+            );
+         }
+       }
+       
+       catch(Exception $e){
+           http_response_code(404);
+           echo json_encode(
+               array(
+                   "title"=>"Error",
+                   "error"=>"Error occurred. Try again after sometime!"
+               )
+           );
+       }
    }
-
-   $quotesCountQuery = "SELECT COUNT(*) as quotesCount FROM quotes WHERE uid = " . $uid;
-   $quotesCountResult = mysqli_query($conn, $quotesCountQuery);
-   if($row = mysqli_fetch_assoc($quotesCountResult))
-   {
-      $userArray += $row;
-   }
-
-   $tagsCountQuery = "SELECT COUNT(*) as tagsCount FROM users NATURAL JOIN tags NATURAL JOIN quotes_tags WHERE uid = " . $uid;
-   $tagsCountResult = mysqli_query($conn, $tagsCountQuery);
-   if($row = mysqli_fetch_assoc($tagsCountResult))
-   {
-      $userArray += $row;
-   }
-
-
-   $userJson = json_encode($userArray);
-
-   echo $userJson;
-   return $userJson;
+   else{
+       // http_response_code(401);
+       echo json_encode(
+           array(
+               "title"=>"Error",
+               "error"=>"Unathorized - Your token did not match the expected token."
+           )
+       );
+   }   
 }
-catch(Exception $e){
-   $error = json_encode(["Error" => "Cannot connect to the database"]);
-   print($error);
-   return $error;
+else{
+   echo json_encode(
+       array(
+           "title"=>"Error",
+           "error"=>"No request data found!"
+       )
+   );
 }
-
 ?>

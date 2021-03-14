@@ -23,7 +23,7 @@ if($data){
         
         if ($row = mysqli_fetch_assoc($result)){
             $auth = new Auth();
-            $token = $auth->getToken($row['uid'], $row['username'], $row['email']);
+            $token = $auth->generateToken($row['uid'], $row['username'], $row['email']);
             echo json_encode(['userData' => $token]);
         }
         else{

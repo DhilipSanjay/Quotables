@@ -1,5 +1,3 @@
-import Auth from '../services/auth';
-
 function PostData(url, token, userData){
     let baseURL = "http://localhost/Quotables/src/api/";
     return new Promise((resolve, reject) => {

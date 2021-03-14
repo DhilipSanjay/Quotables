@@ -18,17 +18,18 @@ class Quote extends React.Component {
     async componentDidMount() {
       this._isMounted = true;
       if(Auth.isAuthenticated()){
-        const token = Auth.getLocalData();
-        const qjsonData = await PostData('fetchQuotes.php', token.token , token);
-        const tjsonData = await PostData('fetchTags.php', token.token , token);
+        const userData = Auth.getLocalData();
+        const token = userData.token;
+        delete userData.token;
+        const qjsonData = await PostData('fetchQuotes.php', token, userData);
+        console.log(userData);
+        const tjsonData = await PostData('fetchTags.php', token, userData);
         
         if(this._isMounted === true)
         {
         this.setState({ isLoading : false, quotesdata : qjsonData, allTags : tjsonData });
         } 
-
       }
-      
     }
 
     componentWillUnmount() {

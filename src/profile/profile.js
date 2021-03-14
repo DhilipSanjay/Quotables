@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Auth from '../services/auth';
+import PostData from '../services/postData';
 
 class Profile extends React.Component {  
   _isMounted = false;
@@ -9,17 +10,22 @@ class Profile extends React.Component {
     super();
     this.baseURL = "http://localhost/Quotables/src/api/";
     this.uid = 1;
-    this.state = { isLoading : true, userData : [] };
+    this.state = { isLoading : true, profileData : [] };
   }
   
   async componentDidMount(){
     this._isMounted = true;
-    const ujsonData = Auth.getLocalData();
-    
-    if(this._isMounted === true)
-    {
-      this.setState({ isLoading : false, userData : ujsonData });
-    } 
+    if(Auth.isAuthenticated()){
+      const userData = Auth.getLocalData();
+      const token = userData.token;
+      delete userData.token;
+      const pjsonData = await PostData('fetchUserProfile.php', token, userData);
+      
+      if(this._isMounted === true)
+      {
+        this.setState({ isLoading : false, profileData : pjsonData });
+      }
+    }
   }
   
   componentWillUnmount() {
@@ -42,14 +48,14 @@ class Profile extends React.Component {
       return (
         <div>
           <h1> Profile Page </h1>
-          {/* <h2>{this.state.userData.username}</h2>
-          <h3>{this.state.userData.bio}</h3>
+          <h2>{this.state.profileData.username}</h2>
+          <h3>{this.state.profileData.bio}</h3>
           <div>
-            Quotes {this.state.userData.quotesCount}
+            Quotes {this.state.profileData.quotesCount}
           </div>
           <div>
-            Tags {this.state.userData.tagsCount}
-          </div> */}
+            Tags {this.state.profileData.tagsCount}
+          </div>
         </div>
       );
     }
