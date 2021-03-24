@@ -49,7 +49,7 @@ class Quote extends React.Component {
         );
       }
         // console.log(allTags);
-      if(this.state.quotesdata.hasOwnProperty('Error') || this.state.quotesdata.hasOwnProperty('Message') ){
+      if(this.state.quotesdata.hasOwnProperty('error') || this.state.quotesdata.hasOwnProperty('message') ){
         return(
           <h2>"Oops! Some error Occured! Try again after sometime"</h2>
         );

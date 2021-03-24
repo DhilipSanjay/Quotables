@@ -40,7 +40,7 @@ if($data){
             $userArray += $row;
          }
 
-         $tagsCountQuery = "SELECT COUNT(*) as tagsCount FROM users NATURAL JOIN tags NATURAL JOIN quotes_tags WHERE uid = " . $uid;
+         $tagsCountQuery = "SELECT count(DISTINCT tagid) as tagsCount FROM users NATURAL JOIN quotes NATURAL JOIN quotes_tags WHERE uid = " . $uid;
          $tagsCountResult = mysqli_query($conn, $tagsCountQuery);
          if($row = mysqli_fetch_assoc($tagsCountResult))
          {

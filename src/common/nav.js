@@ -3,42 +3,32 @@ import './../App.css'
 import {Link} from 'react-router-dom';
 import Auth from '../services/auth';
 
-class Nav extends React.Component {
-    constructor(props){
-        super(props);
-    }
-
-    render(){
-        if(Auth.isAuthenticated()){
-            return(
-                <nav>
-                <h2>Quotables</h2>
-                <ul className="nav-links">
-                    <li onClick={() => {
-                        Auth.logout();
-                        this.props.history.push("/login");
-                    }}>Logout</li>
-                </ul>
-            </nav>
-       )
-    }
-    else{
+function Nav(){
         return(
             <nav>
-                <h2>Quotables</h2>
-                <ul className="nav-links">
+            <h2>Quotables</h2>
+            <ul className="nav-links">
+                {
+                    Auth.isAuthenticated() && 
+                    <li onClick={() => {
+                        Auth.logout();
+                    }}>Logout</li>
+                }
+                {
+                    !Auth.isAuthenticated() &&
                     <Link to="/login">
                     <li>Login</li>
                     </Link>
+                }
+                {
+                    !Auth.isAuthenticated() && 
                     <Link to="/signup">
                     <li>Sign Up</li>
                     </Link>
-                </ul>
+                }
+            </ul>
             </nav>
-        );
-    }
-    }
-    
+       );
 }
 
 export default Nav;

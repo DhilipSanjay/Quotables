@@ -5,10 +5,20 @@ class Auth{
         this.authenticated = false;
     }
 
-    register(userDetails){
-        if(userDetails){
-            
-        }
+    async signup(userDetails){
+        const isRegistered = await PostCredentials('signup.php', userDetails).then((result) => {
+            let responseJSON = result;
+            if(responseJSON.message){
+                console.log(responseJSON);
+                return true;
+            }
+            else{
+                console.log(responseJSON);
+                return false;
+            }
+        });
+
+        return isRegistered;
     }
 
     async login(credentials){

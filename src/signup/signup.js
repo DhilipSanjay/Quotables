@@ -8,7 +8,7 @@ class SignUp extends React.Component{
         this.state = {
             email : '',
             username : '',
-            passwd: '',
+            password: '',
             bio: ''
         }
         this.signup = this.signup.bind(this);
@@ -24,9 +24,15 @@ class SignUp extends React.Component{
             && this.state.password
             && this.state.username 
             && this.state.bio){
-                await Auth.login(this.state)
-                console.log("Successfully registered... redirecting to login page");
-                this.props.history.push("/login");
+                if(await Auth.signup(this.state))
+                {
+                    console.log("Successfully registered... redirecting to login page");
+                    this.props.history.push("/login");
+                }
+                else{
+                    console.log("Some error occurred. Try again");
+                }
+               
         }
         else{
             console.log("Fill all the text boxes");

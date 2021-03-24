@@ -45,6 +45,13 @@ if($data){
         );
     } 
 }
-
+else{
+    echo json_encode(
+        array(
+            "title"=>"Error",
+            "error"=>"No login data found!"
+        )
+    );
+ }
 
 ?>
