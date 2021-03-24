@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {Route, Redirect} from 'react-router-dom';
 import Auth from '../services/auth';
 
@@ -11,7 +11,7 @@ const ProtectedRoute = ({component: Component, ...rest}) => {
                 }
                 else{
                     return <Redirect to={{
-                        pathname: "/",
+                        pathname: "/login",
                         state:{
                             from: props.location
                         }

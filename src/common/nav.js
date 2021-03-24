@@ -3,13 +3,21 @@ import './../App.css'
 import {Link} from 'react-router-dom';
 import Auth from '../services/auth';
 
-function Nav(){
-    if(Auth.isAuthenticated()){
-       return(
-            <nav>
+class Nav extends React.Component {
+    constructor(props){
+        super(props);
+    }
+
+    render(){
+        if(Auth.isAuthenticated()){
+            return(
+                <nav>
                 <h2>Quotables</h2>
                 <ul className="nav-links">
-                    <li onClick={() => Auth.logout()}>Logout</li>
+                    <li onClick={() => {
+                        Auth.logout();
+                        this.props.history.push("/login");
+                    }}>Logout</li>
                 </ul>
             </nav>
        )
@@ -28,6 +36,7 @@ function Nav(){
                 </ul>
             </nav>
         );
+    }
     }
     
 }

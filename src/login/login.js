@@ -1,11 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Redirect} from 'react-router-dom';
 import Auth from '../services/auth';
 
 class Login extends React.Component{
     constructor(props){
-        super(props);
+        super(props); 
         this.state = {
             email: '',
             password: '',
@@ -14,10 +13,11 @@ class Login extends React.Component{
         this.onChange = this.onChange.bind(this);
     }
 
-    login(){
+    async login(){
         if(this.state.email && this.state.password){
-            if(Auth.login(this.state)){
-                this.setState({redirect: true});
+            await Auth.login(this.state)
+            if(Auth.isAuthenticated() && this.props.history !== undefined){
+                this.props.history.push("/quotes");
             }
         }
         else{
@@ -31,11 +31,6 @@ class Login extends React.Component{
     }
 
     render() {
-        
-        // if(Auth.isAuthenticated()){
-        //     this.props.history.push('/quotes');
-        // }
-
         return (
         <div>
             <h2>Login</h2>

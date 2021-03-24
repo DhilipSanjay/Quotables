@@ -1,16 +1,58 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Auth from '../services/auth';
 
 class SignUp extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            email : '',
+            username : '',
+            passwd: '',
+            bio: ''
+        }
+        this.signup = this.signup.bind(this);
+        this.onChange = this.onChange.bind(this);
+    }
+
+    onChange(e){
+        this.setState({[e.target.name]: e.target.value});
+    }
+
+    async signup(){
+        if(this.state.email 
+            && this.state.password
+            && this.state.username 
+            && this.state.bio){
+                await Auth.login(this.state)
+                console.log("Successfully registered... redirecting to login page");
+                this.props.history.push("/login");
+        }
+        else{
+            console.log("Fill all the text boxes");
+        }  
+    }
+
     render() {
         return (
         <div>
             <h1>Sign Up</h1>
-        </div>
+            <label>Email</label>
+            <input type="text" name="email" placeholder="Email" onChange={this.onChange}/>
+            <br/>
+            <label>User name</label>
+            <input type="text" name="username" placeholder="User Name" onChange={this.onChange}/>
+            <br/>
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Password" onChange={this.onChange}/>
+            <br/>
+            <label>Bio</label>
+            <input type="text" name="bio" placeholder="Short Bio" onChange={this.onChange}/>
+            <br/>
+            <input type="submit" value="Login" onClick={this.signup}/>        
+        </div>  
         );
     }
-
-
 }
 
 ReactDOM.render(

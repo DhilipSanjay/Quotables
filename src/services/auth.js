@@ -5,22 +5,27 @@ class Auth{
         this.authenticated = false;
     }
 
-    login(credentials){
-        if(credentials){
-            PostCredentials('login.php', credentials).then((result) => {
-                let responseJSON = result;
-                
-                if(responseJSON.userData){
-                    localStorage.setItem('userData', JSON.stringify(responseJSON));
-                    console.log(responseJSON);
-                    this.authenticated = true;
-                }
-                else{
-                    console.log(responseJSON);
-                    this.authenticated = false;
-                }
-            });
+    register(userDetails){
+        if(userDetails){
+            
         }
+    }
+
+    async login(credentials){
+        await PostCredentials('login.php', credentials).then((result) => {
+            let responseJSON = result;
+            
+            if(responseJSON.userData){
+                localStorage.setItem('userData', JSON.stringify(responseJSON));
+                console.log(responseJSON);
+                this.authenticated = true;
+            }
+            else{
+                console.log(responseJSON);
+                this.authenticated = false;
+            }
+        });
+
         return this.authenticated;
     }
 

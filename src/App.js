@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import {BrowserRouter as Router, Switch, Route, useHistory} from 'react-router-dom';
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import ProtectedRoute from './common/protectedRoute';
 import Quote from './quotes/quotes';
 import Profile from './profile/profile';
