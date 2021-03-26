@@ -1,6 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import {Redirect} from 'react-router-dom';
+import Nav from '../common/nav';
 import Auth from '../services/auth';
 import PostData from '../services/postData';
 
@@ -10,9 +9,10 @@ import AllTags from './allTags.jsx';
 class Quote extends React.Component { 
     _isMounted = false;
 
-    constructor(){
-      super();
-      this.state = { isLoading : false, redirect: false, quotesdata : [], allTags : [] };
+    constructor(props){
+      super(props);
+      this.state = { isLoading : false, quotesdata : [], allTags : [] };
+      this.redirectFunction.bind(this);
     }
     
     async componentDidMount() {
@@ -22,7 +22,6 @@ class Quote extends React.Component {
         const token = userData.token;
         delete userData.token;
         const qjsonData = await PostData('fetchQuotes.php', token, userData);
-        console.log(userData);
         const tjsonData = await PostData('fetchTags.php', token, userData);
         
         if(this._isMounted === true)
@@ -36,26 +35,43 @@ class Quote extends React.Component {
       this._isMounted = false;
     }
 
-    render() {
-      if(this.state.redirect){
-        return(
-          <Redirect to={'/login'} />
-        );
+    redirectFunction(){
+      if(!Auth.isAuthenticated() && this.props.history !== undefined){
+        this.props.history.push("/login");
       }
+    }
 
+    render() {
       if (this.state.isLoading){
         return (
-          <div>Loading...</div>
+          <div>
+            <Nav />
+            Loading...
+          </div>
         );
       }
         // console.log(allTags);
-      if(this.state.quotesdata.hasOwnProperty('error') || this.state.quotesdata.hasOwnProperty('message') ){
+      if(this.state.quotesdata.hasOwnProperty('error')){
         return(
-          <h2>"Oops! Some error Occured! Try again after sometime"</h2>
+          <div>
+            <Nav />
+            <h2>"Oops! Some error Occured! Try again after sometime"</h2>
+          </div>
+
+        );
+      }
+      if(this.state.quotesdata.hasOwnProperty('message') ){
+        return(
+          <div>
+            <Nav />
+            <h2>{this.state.quotesdata.message}</h2>
+          </div>
+
         );
       }
       return (
       <div>
+        <Nav redirectfn = {this.redirectFunction} />
         <h1> Quotes Page </h1>
         {
           this.state.quotesdata.map(
@@ -73,10 +89,5 @@ class Quote extends React.Component {
       );
   }
 }
-  
-  ReactDOM.render(
-    <Quote />,
-    document.getElementById('root')
-  );
 
-  export default Quote;
+export default Quote;

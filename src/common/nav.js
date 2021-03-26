@@ -3,15 +3,22 @@ import './../App.css'
 import {Link} from 'react-router-dom';
 import Auth from '../services/auth';
 
-function Nav(){
+const Nav = (props) => {
         return(
             <nav>
             <h2>Quotables</h2>
             <ul className="nav-links">
                 {
                     Auth.isAuthenticated() && 
+                    <Link to="/profile">
+                    <li>Profile</li>
+                    </Link>
+                }
+                {
+                    Auth.isAuthenticated() && 
                     <li onClick={() => {
                         Auth.logout();
+                        window.location.reload();
                     }}>Logout</li>
                 }
                 {

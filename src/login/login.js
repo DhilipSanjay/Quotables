@@ -1,6 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Auth from '../services/auth';
+import Nav from '../common/nav';
 
 class Login extends React.Component{
     constructor(props){
@@ -33,6 +33,7 @@ class Login extends React.Component{
     render() {
         return (
         <div>
+            <Nav />
             <h2>Login</h2>
             <label>Email</label>
             <input type="text" name="email" placeholder="Email" onChange={this.onChange}/>
@@ -44,10 +45,5 @@ class Login extends React.Component{
         );
     }
 }
-
-ReactDOM.render(
-    <Login />,
-    document.getElementById('root')
-  );
 
 export default Login;

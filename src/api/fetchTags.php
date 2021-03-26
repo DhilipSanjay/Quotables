@@ -65,7 +65,7 @@ if($data){
         echo json_encode(
             array(
                 "title"=>"Error",
-                "error"=>"Unathorized - Your token did not match the expected token."
+                "error"=>"Unauthorized - Your token did not match the expected token."
             )
         );
     }

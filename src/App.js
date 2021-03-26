@@ -1,10 +1,9 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import ProtectedRoute from './common/protectedRoute';
 import Quote from './quotes/quotes';
 import Profile from './profile/profile';
-import Nav from './common/nav';
 import Home from './home/home';
 import Login from './login/login';
 import SignUp from './signup/signup';
@@ -14,7 +13,6 @@ function App() {
   return (
     <Router>
     <div className="App">
-      <Nav />
       <Switch>
         <Route path="/" exact component={Home}/>
         <Route path="/login" exact component={Login}/>

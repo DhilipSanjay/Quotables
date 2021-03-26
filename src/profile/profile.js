@@ -1,7 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Auth from '../services/auth';
 import PostData from '../services/postData';
+import Nav from '../common/nav';
 
 class Profile extends React.Component {  
   _isMounted = false;
@@ -36,17 +36,24 @@ class Profile extends React.Component {
     render() {
       if (this.state.isLoading){
         return (
-          <div>Loading...</div>
+          <div>
+            <Nav />
+            Loading...
+          </div>
         );
       }
 
       if(this.state.userData){
         return(
-          <h2>"Oops! Some error Occured! Try again after sometime"</h2>
+          <div>
+            <Nav />
+            <h2>"Oops! Some error Occured! Try again after sometime"</h2>
+          </div>
         );
       }
       return (
         <div>
+          <Nav />
           <h1> Profile Page </h1>
           <h2>{this.state.profileData.username}</h2>
           <h3>{this.state.profileData.bio}</h3>
@@ -60,10 +67,5 @@ class Profile extends React.Component {
       );
     }
   }
-  
-  ReactDOM.render(
-    <Profile />,
-    document.getElementById('root')
-  );
 
-  export default Profile;
+export default Profile;
