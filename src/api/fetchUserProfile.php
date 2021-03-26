@@ -40,34 +40,34 @@ if($data){
          }
          $stmt->close();
 
-         // Fetch quotes count
-         $quotesCountQuery = "SELECT COUNT(*) as quotesCount FROM quotes WHERE uid = ?";
-         $stmt = $conn->prepare($quotesCountQuery);
-         $stmt->bind_param("i", $uid);
-         $stmt->execute();
-
-         $quotesCountResult = $stmt->get_result();
-         if($row = $quotesCountResult->fetch_assoc())
-         {
-            $userArray += $row;
-         }
-         $stmt->close();
-
-         // Fetch Tags count
-         $tagsCountQuery = "SELECT count(DISTINCT tagid) as tagsCount FROM users NATURAL JOIN quotes NATURAL JOIN quotes_tags WHERE uid = ?";
-         $stmt = $conn->prepare($tagsCountQuery);
-         $stmt->bind_param("i", $uid);
-         $stmt->execute();
-         
-         $tagsCountResult = $stmt->get_result();
-         if($row = $tagsCountResult->fetch_assoc())
-         {
-            $userArray += $row;
-         }
-         $stmt->close();
-
          // Check if user array is empty
          if($userArray){
+            // Fetch quotes count
+            $quotesCountQuery = "SELECT COUNT(*) as quotesCount FROM quotes WHERE uid = ?";
+            $stmt = $conn->prepare($quotesCountQuery);
+            $stmt->bind_param("i", $uid);
+            $stmt->execute();
+
+            $quotesCountResult = $stmt->get_result();
+            if($row = $quotesCountResult->fetch_assoc())
+            {
+               $userArray += $row;
+            }
+            $stmt->close();
+
+            // Fetch Tags count
+            $tagsCountQuery = "SELECT count(DISTINCT tagid) as tagsCount FROM users NATURAL JOIN quotes NATURAL JOIN quotes_tags WHERE uid = ?";
+            $stmt = $conn->prepare($tagsCountQuery);
+            $stmt->bind_param("i", $uid);
+            $stmt->execute();
+            
+            $tagsCountResult = $stmt->get_result();
+            if($row = $tagsCountResult->fetch_assoc())
+            {
+               $userArray += $row;
+            }
+            $stmt->close();
+
             $userJson = json_encode($userArray);   
             echo $userJson;
          }
@@ -82,7 +82,7 @@ if($data){
        }
        
        catch(Exception $e){
-           http_response_code(404);
+         //   http_response_code(404);
            echo json_encode(
                array(
                    "title"=>"Error",

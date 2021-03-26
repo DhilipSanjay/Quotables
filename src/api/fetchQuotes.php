@@ -25,23 +25,33 @@ if($data){
             $database = new Database();
             $conn = $database->getConnection();
         
-            $quotesQuery = "SELECT qid, quote, author FROM quotes WHERE uid = " . $uid;
-            $quotesResult = mysqli_query($conn, $quotesQuery);
+            // Fetch quotes and authors
+            $quotesQuery = "SELECT qid, quote, author FROM quotes WHERE uid = ?";
+            $stmt = $conn->prepare($quotesQuery);
+            $stmt->bind_param("i", $uid);
+            $stmt->execute();
+            $quotesResult = $stmt->get_result();
             $quotesArray = array();
         
-            while($row =mysqli_fetch_assoc($quotesResult))
+            while($row = $quotesResult->fetch_assoc())
             {
                 $quotesArray[] = $row;
             }
+            $stmt->close();
 
+            // If quotes exist, Fetch the tags of quotes
             if(sizeof($quotesArray) > 0){
+                $tagQuery = "SELECT tagid, tagname from quotes_tags natural join tags where qid = ?";
+                $stmt = $conn->prepare($tagQuery);
+
                 for ($i = 0; $i < count($quotesArray); $i++)
                 {
-                    $tagQuery = "SELECT tagid, tagname from quotes_tags natural join tags where qid = " . $quotesArray[$i]["qid"];
-                    $tagResult = mysqli_query($conn, $tagQuery);
+                    $stmt->bind_param("i", $quotesArray[$i]["qid"]);
+                    $stmt->execute();
+                    $tagResult = $stmt->get_result();
                     $tagArray = array();
             
-                    while($row =mysqli_fetch_assoc($tagResult))
+                    while($row = $tagResult->fetch_assoc())
                     {
                         $tagArray[] = $row;
                     }
