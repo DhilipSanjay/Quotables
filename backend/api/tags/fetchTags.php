@@ -9,15 +9,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     return 0;    
  }  
 
-include_once($_SERVER['DOCUMENT_ROOT']. '/Quotables/src/api/dbconnect.php');
-include_once($_SERVER['DOCUMENT_ROOT']. '/Quotables/src/api/auth.php');
+include_once($_SERVER['DOCUMENT_ROOT']. '/Quotables/backend/config/dbconnect.php');
+include_once($_SERVER['DOCUMENT_ROOT']. '/Quotables/backend/models/Auth.php'); 
+include_once($_SERVER['DOCUMENT_ROOT']. '/Quotables/backend/models/Tags.php');
 
-// Get the POST contents 
+// Fetch POST data
 $json = file_get_contents('php://input');
-//JSON decode POST contents
 $data = json_decode($json);
-$auth = new Auth();
 
+// Initialize the necessary classes
+// For database connection
+$database = new Database();
+$conn = $database->getConnection();
+
+// To verify token
+$Auth = new Auth();
+
+// To fetch tags
+$Tags = new Tags();
+
+// Check if POST data exists
 if($data){
     $uid = $data->uid;
     $username = $data->username;
@@ -26,15 +37,8 @@ if($data){
     // Verify JWT token
     if($auth->verifyToken($uid, $username, $email)){
         try{
-            $database = new Database();
-            $conn = $database->getConnection();
-
             // Fetch all the tags of the user
-            $tagsQuery = "SELECT DISTINCT tagid, tagname FROM users natural join quotes_tags natural join tags WHERE uid = ?";
-            $stmt = $conn->prepare($tagsQuery);
-            $stmt->bind_param("i", $uid);
-            $stmt->execute();
-            $tagsResult = $stmt->get_result();
+            $tagsResult = $Tags->readUserTags($uid);
             $tagsArray = array();
         
             while($row = $tagsResult->fetch_assoc())
@@ -44,10 +48,9 @@ if($data){
             
             // Check if user has any tags
             if(sizeof($tagsArray) > 0){
+                // Convert to JSON
                 $tagsJson = json_encode($tagsArray);
-            
                 echo $tagsJson;
-                return $tagsJson;
             }
             else{
                 echo json_encode(
@@ -60,7 +63,6 @@ if($data){
         }
         
         catch(Exception $e){
-            http_response_code(404);
             echo json_encode(
                 array(
                     "title"=>"Error",
@@ -70,7 +72,6 @@ if($data){
         }
     }
     else{
-        // http_response_code(401);
         echo json_encode(
             array(
                 "title"=>"Error",
@@ -80,6 +81,7 @@ if($data){
     }
         
 }
+// No POST data
 else{
     echo json_encode(
         array(

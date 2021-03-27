@@ -9,46 +9,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     return 0;    
  }  
 
-include_once($_SERVER['DOCUMENT_ROOT']. '/Quotables/src/api/dbconnect.php');
-include_once($_SERVER['DOCUMENT_ROOT']. '/Quotables/src/api/auth.php');
+include_once($_SERVER['DOCUMENT_ROOT']. '/Quotables/backend/config/dbconnect.php');
+include_once($_SERVER['DOCUMENT_ROOT']. '/Quotables/backend/models/Auth.php');
+include_once($_SERVER['DOCUMENT_ROOT']. '/Quotables/backend/models/Quotes.php');
+include_once($_SERVER['DOCUMENT_ROOT']. '/Quotables/backend/models/Tags.php');
 
+// Fetch POST data
 $json = file_get_contents('php://input');
 $data = json_decode($json);
-$auth = new Auth();
 
+// Initialize the necessary classes
+// For database connection
+$database = new Database();
+$conn = $database->getConnection();
+
+// To verify token
+$Auth = new Auth();
+
+// To fetch quotes and tags
+$Quotes = new Quotes(); 
+$Tags = new Tags();
+
+// Check if POST data exists
 if($data){
     $uid = $data->uid;
     $username = $data->username;
     $email = $data->email;
+
+    // Verify JWT token
     if($auth->verifyToken($uid, $username, $email)){
-        try{
-            $database = new Database();
-            $conn = $database->getConnection();
-        
-            // Fetch quotes and authors
-            $quotesQuery = "SELECT qid, quote, author FROM quotes WHERE uid = ?";
-            $stmt = $conn->prepare($quotesQuery);
-            $stmt->bind_param("i", $uid);
-            $stmt->execute();
-            $quotesResult = $stmt->get_result();
+        try{       
+            // Fetch quotes
+            $quotesResult = $Quotes->read($uid);
             $quotesArray = array();
         
             while($row = $quotesResult->fetch_assoc())
             {
                 $quotesArray[] = $row;
             }
-            $stmt->close();
 
-            // If quotes exist, Fetch the tags of quotes
+            // If quotes exist, fetch the tags of quotes
             if(sizeof($quotesArray) > 0){
-                $tagQuery = "SELECT tagid, tagname from quotes_tags natural join tags where qid = ?";
-                $stmt = $conn->prepare($tagQuery);
-
                 for ($i = 0; $i < count($quotesArray); $i++)
                 {
-                    $stmt->bind_param("i", $quotesArray[$i]["qid"]);
-                    $stmt->execute();
-                    $tagResult = $stmt->get_result();
+                    $tagResult = $Tags->readQuoteTags($quotesArray[$i]["qid"]);
                     $tagArray = array();
             
                     while($row = $tagResult->fetch_assoc())
@@ -58,8 +62,9 @@ if($data){
             
                     $quotesArray[$i]["tags"] =  $tagArray;
                 }
+                
+                // Convert to JSON
                 $quotesJson = json_encode($quotesArray);
-            
                 echo $quotesJson;
             }
             else{
@@ -73,7 +78,6 @@ if($data){
         }
         
         catch(Exception $e){
-            http_response_code(404);
             echo json_encode(
                 array(
                     "title"=>"Error",
@@ -83,7 +87,6 @@ if($data){
         }
     }
     else{
-        // http_response_code(401);
         echo json_encode(
             array(
                 "title"=>"Error",
@@ -93,6 +96,7 @@ if($data){
     }
         
 }
+// No POST data
 else{
     echo json_encode(
         array(

@@ -8,6 +8,8 @@ class Auth{
     private $issuedAt;
     private $expire;
 
+    // For verification purpose
+    private $table = 'users';
 
     public function __construct() {
         $this->secretKey  = 'dummy_key';
@@ -52,6 +54,7 @@ class Auth{
             return false;
         }
 
+        // Decode JWT 
         $token = JWT::decode(
                     $jwt,
                     $this->secretKey,
@@ -69,6 +72,74 @@ class Auth{
             return false;
         }
         return true;
+    }
+
+    // Verify email & password for login
+    public function verifyEmailPassword($email, $passwd){
+        // Query
+        $query = 'SELECT 
+                    uid, 
+                    username, 
+                    email 
+                FROM 
+                    ' . $this->table . ' 
+                WHERE
+                    email = ? 
+                AND 
+                    passwd = ?';
+        
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
+
+        // Bind parameters
+        $stmt->bind_param("ss", $email, $passwd);
+        
+        // Execute query
+        $stmt->execute();
+        
+        // Fetch Results
+        $result = $stmt->get_result();
+        
+        // If row count is one, then return true
+        if( $result->num_rows == 1 )
+            return $result->fetch_assoc();
+
+        // else return false
+        return false;
+    }
+
+    // Check if email id is not registered
+    public function checkEmail($email){
+        // Query
+        $query = 'SELECT 
+                    * 
+                FROM 
+                    ' . $this->table . ' 
+                WHERE 
+                    email = ?';
+
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
+
+        // Bind parameters
+        $stmt->bind_param("s", $email);
+
+        // Execute query
+        $stmt->execute();
+
+        // Fetch Results
+        $result = $stmt->get_result();
+
+        // Close the statement
+        $stmt->close();
+
+        // If row count is zero, return true
+        // The email id is not registered
+        if( $result->num_rows == 0 )
+            return true;
+
+        // else return false
+        return false;
     }
 
 }
