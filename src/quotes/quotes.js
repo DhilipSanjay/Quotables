@@ -21,8 +21,8 @@ class Quote extends React.Component {
         const userData = Auth.getLocalData();
         const token = userData.token;
         delete userData.token;
-        const qjsonData = await PostData('fetchQuotes.php', token, userData);
-        const tjsonData = await PostData('fetchTags.php', token, userData);
+        const qjsonData = await PostData('Quotes/fetchQuotes.php', token, userData);
+        const tjsonData = await PostData('Tags/fetchTags.php', token, userData);
         
         if(this._isMounted === true)
         {

@@ -1,5 +1,5 @@
 export function PostCredentials(url, userData){
-    let baseURL = "http://localhost/Quotables/src/api/";
+    let baseURL = "http://localhost/Quotables/backend/api/auth/";
 
     return new Promise((resolve, reject) => {
         return fetch(baseURL + url, {

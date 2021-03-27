@@ -1,5 +1,5 @@
 function PostData(url, token, userData){
-    let baseURL = "http://localhost/Quotables/src/api/";
+    let baseURL = "http://localhost/Quotables/backend/api/";
     return new Promise((resolve, reject) => {
         return fetch(baseURL + url, {
             method: 'POST',

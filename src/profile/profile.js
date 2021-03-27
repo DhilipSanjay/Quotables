@@ -8,7 +8,6 @@ class Profile extends React.Component {
 
   constructor(){
     super();
-    this.baseURL = "http://localhost/Quotables/src/api/";
     this.uid = 1;
     this.state = { isLoading : true, profileData : [] };
   }
@@ -19,7 +18,7 @@ class Profile extends React.Component {
       const userData = Auth.getLocalData();
       const token = userData.token;
       delete userData.token;
-      const pjsonData = await PostData('fetchUserProfile.php', token, userData);
+      const pjsonData = await PostData('Profile/fetchUserProfile.php', token, userData);
       
       if(this._isMounted === true)
       {
