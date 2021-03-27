@@ -18,49 +18,59 @@ $database = new Database();
 $conn = $database->getConnection();
 
 // To check if email id already exists
-$Auth = new Auth();
+$Auth = new Auth($conn);
 
 // To create new account
-$Profile = new Profile(); 
+$Profile = new Profile($conn); 
 
 // Check if POST data exists
-if($data){       
-    // Sanitize the user inputs
-    $email = mysqli_real_escape_string($conn, filter_var($data->email, FILTER_SANITIZE_STRING));
-    $password = md5($data->password);
-    $username = mysqli_real_escape_string($conn,filter_var($data->username, FILTER_SANITIZE_STRING));
-    $bio = mysqli_real_escape_string($conn,filter_var($data->bio, FILTER_SANITIZE_STRING));
-
-    // Check if the email id is not registered earlier
-    if($Auth->checkEmail($email)){
-        // Not registered -> register by creating profile.
-        if($Profile->create($username, $email, $password, $bio)){      
+if($data){
+    try{
+        // Sanitize the user inputs
+        $email = mysqli_real_escape_string($conn, filter_var($data->email, FILTER_SANITIZE_STRING));
+        $password = md5($data->password);
+        $username = mysqli_real_escape_string($conn,filter_var($data->username, FILTER_SANITIZE_STRING));
+        $bio = mysqli_real_escape_string($conn,filter_var($data->bio, FILTER_SANITIZE_STRING));
+        
+        if($Auth->checkEmail($email)){
+            // Not registered -> register by creating profile.
+            if($Profile->create($username, $email, $password, $bio)){      
+                echo json_encode(
+                    array(
+                        "title"=>"Message",
+                        "message"=>"User account created successfully!"
+                    )
+                );
+            }
+            // Error occured while creating profile
+            else{
+                    echo json_encode(
+                        array(
+                            "title"=>"Error",
+                            "error"=>"Error occurred. User account not created!"
+                        )
+                    );
+            }
+        }
+        // Email id already registered
+        else{
             echo json_encode(
                 array(
-                    "title"=>"Message",
-                    "message"=>"User account created successfully!"
+                    "title"=>"Error",
+                    "error"=>"User account already exists!"
                 )
             );
         }
-        // Error occured while creating profile
-        else{
-                echo json_encode(
-                    array(
-                        "title"=>"Error",
-                        "error"=>"Error occurred. Try again after sometime!"
-                    )
-                );
-        }
     }
-    // Email id already registered
-    else{
+    catch(Throwable $e){
         echo json_encode(
-            array(
-                "title"=>"Error",
-                "error"=>"User account already exists!"
-            )
+           array(
+                 "title"=>"Error",
+                 "error"=>"Error occurred. Try again after sometime!"
+           )
         );
-    }
+     }
+    // Check if the email id is not registered earlier
 }
 // No POST data found
 else{

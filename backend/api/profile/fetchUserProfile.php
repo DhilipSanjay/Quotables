@@ -24,24 +24,24 @@ $database = new Database();
 $conn = $database->getConnection();
 
 // To verify token
-$Auth = new Auth();
+$Auth = new Auth($conn);
 
 // To fetch user profile
-$Profile = new Profile();
+$Profile = new Profile($conn);
 
 // To fetch quotes and tags count
-$Quotes = new Quotes(); 
-$Tags = new Tags(); 
+$Quotes = new Quotes($conn); 
+$Tags = new Tags($conn); 
 
 // Check if POST data exists
 if($data){
-   $uid = $data->uid;
-   $username = $data->username;
-   $email = $data->email;
-
-   // Verify JWT token
-   if($auth->verifyToken($uid, $username, $email)){
-      try{
+   try{
+      $uid = $data->uid;
+      $username = $data->username;
+      $email = $data->email;
+      
+      // Verify JWT token
+      if($Auth->verifyToken($uid, $username, $email)){
          $userArray = array();
          
          // Fetch user profile
@@ -55,7 +55,7 @@ if($data){
             $userArray['quotesCount'] = $Quotes->quotesCount($uid);
 
             // Fetch tags count
-            $userArray['tagsCount'] = $TAgs->tagsCount($uid);
+            $userArray['tagsCount'] = $Tags->tagsCount($uid);
 
             $userJson = json_encode($userArray);   
             echo $userJson;
@@ -69,24 +69,24 @@ if($data){
             );
          } 
       }
-      catch(Exception $e){
-         echo json_encode(
-            array(
+      // Token verification failed
+      else{
+          echo json_encode(
+              array(
                   "title"=>"Error",
-                  "error"=>"Error occurred. Try again after sometime!"
-            )
-         );
-      }
+                  "error"=>"Unauthorized - Your token did not match the expected token."
+              )
+          );
+      }   
    }
-   // Token verification failed
-   else{
-       echo json_encode(
-           array(
+   catch(Throwable $e){
+      echo json_encode(
+         array(
                "title"=>"Error",
-               "error"=>"Unauthorized - Your token did not match the expected token."
-           )
-       );
-   }   
+               "error"=>"Error occurred. Try again after sometime!"
+         )
+      );
+   }
 }
 // No POST data found
 else{

@@ -24,21 +24,21 @@ $database = new Database();
 $conn = $database->getConnection();
 
 // To verify token
-$Auth = new Auth();
+$Auth = new Auth($conn);
 
 // To fetch quotes and tags
-$Quotes = new Quotes(); 
-$Tags = new Tags();
+$Quotes = new Quotes($conn); 
+$Tags = new Tags($conn);
 
 // Check if POST data exists
 if($data){
+    try{       
     $uid = $data->uid;
     $username = $data->username;
     $email = $data->email;
 
     // Verify JWT token
-    if($auth->verifyToken($uid, $username, $email)){
-        try{       
+    if($Auth->verifyToken($uid, $username, $email)){
             // Fetch quotes
             $quotesResult = $Quotes->read($uid);
             $quotesArray = array();
@@ -76,25 +76,24 @@ if($data){
                 );
             }    
         }
-        
-        catch(Exception $e){
+        // Token verification failed
+        else{
             echo json_encode(
                 array(
                     "title"=>"Error",
-                    "error"=>"Error occurred. Try again after sometime!"
+                    "error"=>"Unauthorized - Your token did not match the expected token."
                 )
             );
         }
     }
-    else{
+    catch(Throwable $e){
         echo json_encode(
             array(
                 "title"=>"Error",
-                "error"=>"Unauthorized - Your token did not match the expected token."
+                "error"=>"Error occurred. Try again after sometime!"
             )
         );
-    }
-        
+    }        
 }
 // No POST data
 else{

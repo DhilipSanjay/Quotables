@@ -23,20 +23,20 @@ $database = new Database();
 $conn = $database->getConnection();
 
 // To verify token
-$Auth = new Auth();
+$Auth = new Auth($conn);
 
 // To fetch tags
-$Tags = new Tags();
+$Tags = new Tags($conn);
 
 // Check if POST data exists
 if($data){
-    $uid = $data->uid;
-    $username = $data->username;
-    $email = $data->email;
+    try{
+        $uid = $data->uid;
+        $username = $data->username;
+        $email = $data->email;
 
-    // Verify JWT token
-    if($auth->verifyToken($uid, $username, $email)){
-        try{
+        // Verify JWT token
+        if($Auth->verifyToken($uid, $username, $email)){
             // Fetch all the tags of the user
             $tagsResult = $Tags->readUserTags($uid);
             $tagsArray = array();
@@ -61,25 +61,24 @@ if($data){
                 );
             }
         }
-        
-        catch(Exception $e){
+        else{
             echo json_encode(
                 array(
                     "title"=>"Error",
-                    "error"=>"Error occurred. Try again after sometime!"
+                    "error"=>"Unauthorized - Your token did not match the expected token."
                 )
             );
         }
     }
-    else{
+    // Token verification failed
+    catch(Throwable $e){
         echo json_encode(
             array(
                 "title"=>"Error",
-                "error"=>"Unauthorized - Your token did not match the expected token."
+                "error"=>"Error occurred. Try again after sometime!"
             )
         );
-    }
-        
+    }        
 }
 // No POST data
 else{

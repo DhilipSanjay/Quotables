@@ -11,7 +11,7 @@ class Quotes{
     public $author;
 
     // Constructor
-    public function __constructor($conn){
+    public function __construct($conn){
         $this->conn = $conn;
     }
 
@@ -59,12 +59,15 @@ class Quotes{
         $stmt->execute();
 
         // Fetch results 
-        $result = $stmt->fetch_assoc();
+        $result = $stmt->get_result();
+
+        // Fetch row
+        $row = $result->fetch_assoc();
        
         // Close the statement
         $stmt->close();
 
-        return $result['quotesCount'];
+        return $row['quotesCount'];
     }
 
 

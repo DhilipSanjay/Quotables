@@ -12,7 +12,7 @@ class Profile{
     public $bio;
 
     // Constructor
-    public function __constructor($conn){
+    public function __construct($conn){
         $this->conn = $conn;
     }
 
@@ -38,8 +38,11 @@ class Profile{
         $stmt->execute();
 
         // Fetch Results
-        $row = $stmt->fetch_assoc();
+        $result = $stmt->get_result();
 
+        // Fetch row
+        $row = $result->fetch_assoc();
+        
         // Close the statement
         $stmt->close();
 
@@ -68,8 +71,6 @@ class Profile{
                             bio)
                         VALUES 
                             (?, ?, ?, ?)';
-        
-        $stmt->execute();
         
         // Prepare statement
         $stmt = $this->conn->prepare($signupQuery);

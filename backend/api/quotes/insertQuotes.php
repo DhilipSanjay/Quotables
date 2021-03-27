@@ -19,42 +19,45 @@ $database = new Database();
 $conn = $database->getConnection();
 
 // To verify token
-$Auth = new Auth();
+$Auth = new Auth($conn);
 
 // To insert quotes and tags
-$Quotes = new Quotes(); 
-$Tags = new Tags();
+$Quotes = new Quotes($conn); 
+$Tags = new Tags($conn);
 
 // Check if POST data exists
 if($data){
-    $uid = $data->uid;
-    $username = $data->username;
-    $email = $data->email;
+    try{
+        $uid = $data->uid;
+        $username = $data->username;
+        $email = $data->email;
 
-    // Verify JWT token
-    if($auth->verifyToken($uid, $username, $email)){
-        try{
-            // Insert code goes here
+        // Verify JWT token
+        if($Auth->verifyToken($uid, $username, $email)){
+                // Insert code goes here
             
             
         }
-        catch(Exception $e){
+        else{
             echo json_encode(
                 array(
                     "title"=>"Error",
-                    "error"=>"Error occurred. Try again after sometime!"
+                    "error"=>"Unauthorized - Your token did not match the expected token."
                 )
             );
-          }
+        }
     }
-    else{
+    
+    // Token verification failed
+    catch(Throwable $e){
         echo json_encode(
             array(
                 "title"=>"Error",
-                "error"=>"Unauthorized - Your token did not match the expected token."
+                "error"=>"Error occurred. Try again after sometime!"
             )
         );
     }
+    
 }
 // No POST data
 else {

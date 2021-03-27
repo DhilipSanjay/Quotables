@@ -9,13 +9,15 @@ class Auth{
     private $expire;
 
     // For verification purpose
+    private $conn;
     private $table = 'users';
 
-    public function __construct() {
+    public function __construct($conn) {
         $this->secretKey  = 'dummy_key';
         $this->issuedAt   = time();
         $this->expire     = $this->issuedAt+ (60 * 60 * 24 * 1); // One day expiry 
-        $this->serverName = "http://localhost";             
+        $this->serverName = "http://localhost";
+        $this->conn = $conn;
     }
 
     public function generateToken($uid, $username, $email){

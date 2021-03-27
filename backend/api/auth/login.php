@@ -16,7 +16,7 @@ $database = new Database();
 $conn = $database->getConnection();
 
 // To verify email id and password
-$Auth = new Auth();
+$Auth = new Auth($conn);
 
 // Check if POST data exists
 if($data){
@@ -41,7 +41,7 @@ if($data){
             );
         }
     }
-    catch(Exception $e){
+    catch(Throwable $e){
         echo json_encode(
             array(
                 "title"=>"Error",

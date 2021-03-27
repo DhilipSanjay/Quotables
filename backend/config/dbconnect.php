@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(0);
 class Database{
     private $servername="localhost";
     private $database="quotables";
@@ -16,7 +16,7 @@ class Database{
                                         $this->password,
                                         $this->database);
         }
-        catch(Exception $e){
+        catch(Throwable $e){
             echo  "Cannot connect to the database: " . $e;
         }
         return $this->conn;

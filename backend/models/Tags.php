@@ -10,7 +10,7 @@ class Tags{
     public $tagname;
 
     // Constructor
-    public function __constructor($conn){
+    public function __construct($conn){
         $this->conn = $conn;
     }
 
@@ -91,12 +91,15 @@ class Tags{
         $stmt->execute();
 
         // Fetch results 
-        $result = $stmt->fetch_assoc();
+        $result = $stmt->get_result();
+
+        // Fetch row
+        $row = $result->fetch_assoc();
        
         // Close the statement
         $stmt->close();
 
-        return $result['tagsCount'];
+        return $row['tagsCount'];
     }
 
 
