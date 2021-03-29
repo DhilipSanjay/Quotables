@@ -102,6 +102,70 @@ class Tags{
         return $row['tagsCount'];
     }
 
+    // Insert Tags
+    public function tagsInsert($tagname){
+        // Query
+        $query = 'INSERT INTO
+                ' . $this->table . '
+                    (tagname) 
+                VALUES
+                    (?)';
+        
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
+
+        // Bind parameters
+        // Note - store tags as lower case
+        $stmt->bind_param("s", strtolower($tagname));
+        
+        // Execute query
+        if($stmt->execute())
+            return true;
+
+        printf("Error: %s\n", $stmt->error);
+    
+        return false;
+    }
+
+    // Fetch tagid of tagname
+    public function readTagId($tagname){
+        // Query
+        $query = 'SELECT 
+                            tagid 
+                        FROM 
+                            ' . $this->table . ' 
+                        WHERE 
+                            tagname = ?';
+        
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
+
+        // Bind parameters
+        // Note - Convert to lowercase
+        $stmt->bind_param("i", strtolower($tagname));
+        
+        // Execute query
+        $stmt->execute();
+
+        // Fetch results 
+        $result = $stmt->get_result();
+
+        // Fetch row
+        $row = $result->fetch_assoc();
+       
+        // Close the statement
+        $stmt->close();
+
+        // Change the class variable tagid and return true
+        if($row){
+            $this->tagid = $row['tagid'];
+            return true;
+        }
+
+        // No such tag was found -> return false
+        return false;
+    }
+
 
 }
 

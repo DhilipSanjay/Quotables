@@ -34,7 +34,7 @@ if($data){
 
         // Verify JWT token
         if($Auth->verifyToken($uid, $username, $email)){
-                // Insert code goes here
+            // Insert code goes here
             
             
         }
