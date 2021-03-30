@@ -83,7 +83,7 @@ class Quotes{
                     quote,
                     author)
                 VALUES
-                    (?, ?, ?, ?)';
+                    (?, ?, ?)';
         
         // Prepare statement
         $stmt = $this->conn->prepare($query);
@@ -145,7 +145,6 @@ class Quotes{
         $stmt = $this->conn->prepare($query);
 
         // Bind parameters
-        // Note - Convert to lowercase
         $stmt->bind_param("ss", $quote, $author);
         
         // Execute query

@@ -1,7 +1,7 @@
 USE quotables;
 
 CREATE TABLE users (
-  uid int PRIMARY KEY,
+  uid int PRIMARY KEY AUTO_INCREMENT,
   username varchar(30) NOT NULL,
   email varchar(30) UNIQUE NOT NULL,
   passwd varchar(32) NOT NULL,
@@ -10,14 +10,14 @@ CREATE TABLE users (
 
 CREATE TABLE quotes (
   uid int NOT NULL,
-  qid int PRIMARY KEY,
+  qid int PRIMARY KEY AUTO_INCREMENT,
   quote varchar(200) NOT NULL,
-  author varchar(30) NOT NULL,
+  author varchar(30) NOT NULL DEFAULT "Anonymous",
   FOREIGN KEY (uid) REFERENCES users(uid) ON DELETE CASCADE
 );
 
 CREATE TABLE tags(
-  tagid int PRIMARY KEY,
+  tagid int PRIMARY KEY AUTO_INCREMENT,
   tagname varchar(30) NOT NULL
 );
 

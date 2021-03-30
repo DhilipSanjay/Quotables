@@ -31,13 +31,61 @@ if($data){
         $uid = $data->uid;
         $username = $data->username;
         $email = $data->email;
-
+        $quote = $data->quote;
+        $author = $data->author;
+        $tags = $data->tags;        
         // Verify JWT token
         if($Auth->verifyToken($uid, $username, $email)){
-            // Insert code goes here
+            // Check if quote is not duplicate
+            if($Quotes->readQuoteId($quote, $author) === false){
+                
+                // Insert the quote
+                if($Quotes->quotesInsert($uid, $quote, $author)){
+                    $Quotes->readQuoteId($quote, $author);
+                    $qid = $Quotes->qid;
+
+                    for($i = 0; $i < sizeof($tags); $i++){
+                        // Insert into tags if not present
+                        $tagname = $tags[$i];
+                        if($Tags->readTagId($tagname) === false){
+                            $Tags->tagsInsert($tagname);
+                            $Tags->readTagId($tagname);
+                        }
+                        $tagid = $Tags->tagid;
+
+                        // Insert into quotes and tags relation
+                        $Quotes->quoteTagInsert($qid, $tagid);
+                    }
+                    echo json_encode(
+                        array(
+                            "title"=>"Message",
+                            "message"=>"Quote and tags inserted successfully!"
+                        )
+                    );
+                }
+                // Error occured while inserting quote
+                else{
+                    echo json_encode(
+                        array(
+                            "title"=>"Error",
+                            "error"=>"Error occurred. Quote not inserted!"
+                        )
+                    );
+                }
+            }
+            // Quote already exists
+            else{
+                echo json_encode(
+                    array(
+                        "title"=>"Error",
+                        "error"=>"Quote already exists!"
+                    )
+                );
+            }
             
             
         }
+        // Token verification failed
         else{
             echo json_encode(
                 array(
@@ -47,8 +95,7 @@ if($data){
             );
         }
     }
-    
-    // Token verification failed
+
     catch(Throwable $e){
         echo json_encode(
             array(
@@ -64,7 +111,7 @@ else {
     echo json_encode(
         array(
             "title"=>"Error",
-            "error"=>"No user data found!"
+            "error"=>"No post data found!"
         )
     );
 }

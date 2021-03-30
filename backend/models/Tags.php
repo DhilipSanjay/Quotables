@@ -142,7 +142,7 @@ class Tags{
 
         // Bind parameters
         // Note - Convert to lowercase
-        $stmt->bind_param("i", strtolower($tagname));
+        $stmt->bind_param("s", strtolower($tagname));
         
         // Execute query
         $stmt->execute();
