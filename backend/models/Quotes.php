@@ -16,7 +16,7 @@ class Quotes{
     }
 
     // Read all quotes of a user
-    public function read($uid){
+    public function quotesRead($uid){
         // Query
         $quotesQuery = 'SELECT 
                             qid, 
@@ -75,7 +75,7 @@ class Quotes{
 
 
     // Insert Quotes
-    public function quotesInsert($uid, $quote, $author){
+    public function quoteInsert($uid, $quote, $author){
         // Query
         $query = 'INSERT INTO
                 ' . $this->table . ' 
@@ -130,13 +130,15 @@ class Quotes{
 
 
     // Fetch quote id of a quote, author
-    public function readQuoteId($quote, $author){
+    public function readQuoteId($uid, $quote, $author){
         // Query
         $query = 'SELECT 
                     qid 
                 FROM 
                     ' . $this->table . ' 
-                WHERE 
+                WHERE
+                    uid = ?
+                AND 
                     quote = ?
                 AND
                     author = ?';
@@ -145,7 +147,7 @@ class Quotes{
         $stmt = $this->conn->prepare($query);
 
         // Bind parameters
-        $stmt->bind_param("ss", $quote, $author);
+        $stmt->bind_param("iss", $uid, $quote, $author);
         
         // Execute query
         $stmt->execute();
@@ -167,7 +169,37 @@ class Quotes{
 
         // No such tag was found -> return false
         return false;
-    }   
+    }
+    
+    // Delete a quote from quotes table
+    public function quoteDelete($uid, $qid, $quote, $author){
+        // Query
+        $query = 'DELETE 
+                FROM
+                ' . $this->table . '
+                WHERE
+                    uid = ?
+                AND
+                    qid = ?
+                AND
+                    quote = ?
+                AND
+                    author = ?';
+        
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
+
+        // Bind the parameters
+        $stmt->bind_param("iiss", $uid, $qid, $quote, $author);
+
+        // Execute the statement
+        if($stmt->execute())
+            return True;
+
+        printf("Error: %s\n", $stmt->error);
+
+        return false;
+    }
 }
 
 ?>

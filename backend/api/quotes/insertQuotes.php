@@ -37,11 +37,11 @@ if($data){
         // Verify JWT token
         if($Auth->verifyToken($uid, $username, $email)){
             // Check if quote is not duplicate
-            if($Quotes->readQuoteId($quote, $author) === false){
+            if($Quotes->readQuoteId($uid, $quote, $author) === false){
                 
                 // Insert the quote
-                if($Quotes->quotesInsert($uid, $quote, $author)){
-                    $Quotes->readQuoteId($quote, $author);
+                if($Quotes->quoteInsert($uid, $quote, $author)){
+                    $Quotes->readQuoteId($uid, $quote, $author);
                     $qid = $Quotes->qid;
 
                     for($i = 0; $i < sizeof($tags); $i++){

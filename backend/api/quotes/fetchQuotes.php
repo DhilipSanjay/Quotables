@@ -40,7 +40,7 @@ if($data){
     // Verify JWT token
     if($Auth->verifyToken($uid, $username, $email)){
             // Fetch quotes
-            $quotesResult = $Quotes->read($uid);
+            $quotesResult = $Quotes->quotesRead($uid);
             $quotesArray = array();
         
             while($row = $quotesResult->fetch_assoc())
