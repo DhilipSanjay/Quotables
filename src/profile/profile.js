@@ -18,7 +18,7 @@ class Profile extends React.Component {
       const userData = Auth.getLocalData();
       const token = userData.token;
       delete userData.token;
-      const pjsonData = await PostData('Profile/fetchUserProfile.php', token, userData);
+      const pjsonData = await PostData('Profile/fetchProfile.php', token, userData);
       
       if(this._isMounted === true)
       {
