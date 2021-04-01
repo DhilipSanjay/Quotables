@@ -20,21 +20,21 @@ class Tags{
         $tagsQuery = 'SELECT DISTINCT 
                         tagid, 
                         tagname 
-                    FROM 
-                        users 
+                    FROM
+                        ' . $this->table . '  
+                    NATURAL JOIN 
+                        quotes 
                     NATURAL JOIN 
                         quotes_tags 
-                    NATURAL JOIN 
-                        ' . $this->table . ' 
                     WHERE 
                         uid = ?';
         
         // Prepare statement
         $stmt = $this->conn->prepare($tagsQuery);
-
+        
         // Bind parameters
         $stmt->bind_param("i", $uid);
-        
+
         // Execute query
         $stmt->execute();
        
@@ -131,11 +131,11 @@ class Tags{
     public function readTagId($tagname){
         // Query
         $query = 'SELECT 
-                            tagid 
-                        FROM 
-                            ' . $this->table . ' 
-                        WHERE 
-                            tagname = ?';
+                    tagid 
+                FROM 
+                    ' . $this->table . ' 
+                WHERE 
+                    tagname = ?';
         
         // Prepare statement
         $stmt = $this->conn->prepare($query);

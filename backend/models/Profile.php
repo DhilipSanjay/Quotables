@@ -88,8 +88,27 @@ class Profile{
     }
 
     // Update user profile
-    public function update(){
+    public function update($bio, $uid){
+        $query = 'UPDATE 
+                ' . $this->table . '
+                SET
+                    bio = ?
+                WHERE
+                    uid = ?';
+        
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
+        
+        // Bind the parameters
+        $stmt->bind_param("si", $bio, $uid);
 
+        // Execute the statement
+        if($stmt->execute())
+            return True;
+
+        printf("Error: %s\n", $stmt->error);
+
+        return false;
     }
 
 }

@@ -29,15 +29,15 @@ $Tags = new Tags($conn);
 if($data){
     try{
         $uid = $data->uid;
-        $username = $data->username;
-        $email = $data->email;
+        $username = mysqli_real_escape_string($conn, filter_var($data->username));
+        $email = mysqli_real_escape_string($conn, filter_var($data->email));
         $qid = $data->qid;        
-        $quote = $data->quote;
-        $author = $data->author;
+        $quote = mysqli_real_escape_string($conn, filter_var($data->quote));
+        $author = mysqli_real_escape_string($conn, filter_var($data->author));
         // Verify JWT token
         if($Auth->verifyToken($uid, $username, $email)){
-            // Check if the quote exists in database and
-            if($Quotes->readQuoteId($uid, $quote, $author) && $Quotes->$qid == $qid)
+            // Check if the quote exists in database and it belongs to the authorized user
+            if($Quotes->readQuoteId($uid, $quote, $author) && $Quotes->qid === $qid)
             {
                 // Delete the quote
                 // On deleting the quotes, the db entires in quotes_tags will be cascaded.

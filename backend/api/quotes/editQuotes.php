@@ -21,7 +21,7 @@ $conn = $database->getConnection();
 // To verify token
 $Auth = new Auth($conn);
 
-// To insert quotes and tags
+// To edit quotes and tags
 $Quotes = new Quotes($conn); 
 $Tags = new Tags($conn);
 
@@ -31,59 +31,47 @@ if($data){
         $uid = $data->uid;
         $username = mysqli_real_escape_string($conn, filter_var($data->username));
         $email = mysqli_real_escape_string($conn, filter_var($data->email));
-        $quote = mysqli_real_escape_string($conn, filter_var($data->quote));
-        $author = mysqli_real_escape_string($conn, filter_var($data->author));
-        $tags = $data->tags;        
+        $qid = $data->qid;
+        $oldquote = mysqli_real_escape_string($conn, filter_var($data->oldquote));
+        $oldauthor = mysqli_real_escape_string($conn, filter_var($data->oldauthor));
+        $newquote = mysqli_real_escape_string($conn, filter_var($data->newquote));
+        $newauthor = mysqli_real_escape_string($conn, filter_var($data->newauthor));
+
         // Verify JWT token
         if($Auth->verifyToken($uid, $username, $email)){
-            // Check if quote is not duplicate
-            if($Quotes->readQuoteId($uid, $quote, $author) === false){
-                
-                // Insert the quote
-                if($Quotes->quoteInsert($uid, $quote, $author)){
-                    $Quotes->readQuoteId($uid, $quote, $author);
-                    $qid = $Quotes->qid;
-
-                    for($i = 0; $i < sizeof($tags); $i++){
-                        // Insert into tags if not present
-                        $tagname = mysqli_real_escape_string($conn, filter_var($tags[$i]));
-                        if($Tags->readTagId($tagname) === false){
-                            $Tags->tagsInsert($tagname);
-                            $Tags->readTagId($tagname);
-                        }
-                        $tagid = $Tags->tagid;
-
-                        // Insert into quotes and tags relation
-                        $Quotes->quoteTagInsert($qid, $tagid);
-                    }
+            // Check if the quote exists in database and it belongs to the authorized user
+            if($Quotes->readQuoteId($uid, $oldquote, $oldauthor) && $Quotes->qid === $qid)
+            {
+                // Edit the quote and author
+                // Editing the tags must be added
+                if($Quotes->quoteEdit($uid, $qid, $newquote, $newauthor)){
                     echo json_encode(
                         array(
                             "title"=>"Message",
-                            "message"=>"Quote and tags inserted successfully!"
+                            "message"=>"Quote edited successfully!"
                         )
                     );
                 }
-                // Error occured while inserting quote
+                // Error occured while deleting quote
                 else{
                     echo json_encode(
                         array(
                             "title"=>"Error",
-                            "error"=>"Error occurred. Quote not inserted!"
+                            "error"=>"Error occurred. Quote not edited!"
                         )
                     );
                 }
             }
-            // Quote already exists
+            // Quote id, quote or author mismatch
             else{
                 echo json_encode(
                     array(
                         "title"=>"Error",
-                        "error"=>"Quote already exists!"
+                        "error"=>"Are you sure it's your quote?"
                     )
                 );
             }
-            
-            
+
         }
         // Token verification failed
         else{

@@ -11,8 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 include_once($_SERVER['DOCUMENT_ROOT']. '/Quotables/backend/config/dbconnect.php');
 include_once($_SERVER['DOCUMENT_ROOT']. '/Quotables/backend/models/Auth.php');
 include_once($_SERVER['DOCUMENT_ROOT']. '/Quotables/backend/models/Profile.php');
-include_once($_SERVER['DOCUMENT_ROOT']. '/Quotables/backend/models/Quotes.php');
-include_once($_SERVER['DOCUMENT_ROOT']. '/Quotables/backend/models/Tags.php');
 
 // Fetch POST data
 $json = file_get_contents('php://input');
@@ -26,48 +24,55 @@ $conn = $database->getConnection();
 // To verify token
 $Auth = new Auth($conn);
 
-// To fetch user profile
+// To edit user profile
 $Profile = new Profile($conn);
-
-// To fetch quotes and tags count
-$Quotes = new Quotes($conn); 
-$Tags = new Tags($conn); 
 
 // Check if POST data exists
 if($data){
    try{
       $uid = $data->uid;
-      $username = $data->username;
-      $email = $data->email;
+      $username = mysqli_real_escape_string($conn, filter_var($data->username));
+      $email = mysqli_real_escape_string($conn, filter_var($data->email));
+      $bio = mysqli_real_escape_string($conn, filter_var($data->bio));
       
+      // Users can change their bio only
+      // Changing username requires reissue of JWT token
+      // Or the user must be logged out after changing username
+      $newbio = mysqli_real_escape_string($conn, filter_var($data->newbio));
+
       // Verify JWT token
       if($Auth->verifyToken($uid, $username, $email)){
-         $userArray = array();
          
-         // Fetch user profile
-         if($Profile->read($uid)){
-            $userArray['uid'] = $Profile->uid;
-            $userArray['username'] = $Profile->username;
-            $userArray['email'] = $Profile->email;
-            $userArray['bio'] = $Profile->bio;
+         // Check if user profile exists
+        if($Profile->read($uid)){
 
-            // Fetch quotes count
-            $userArray['quotesCount'] = $Quotes->quotesCount($uid);
-
-            // Fetch tags count
-            $userArray['tagsCount'] = $Tags->tagsCount($uid);
-
-            $userJson = json_encode($userArray);   
-            echo $userJson;
-         }
-         else{
-            echo json_encode(
-                  array(
-                     "title"=>"Message",
-                     "message"=>"User information not found!"
-                  )
+            // Update user profile
+            if($Profile->update($newbio, $uid)){
+                echo json_encode(
+                    array(
+                        "title"=>"Message",
+                        "message"=>"User bio edited successfully!"
+                    )
+                );
+            }
+            // Error occured while creating profile
+            else{
+                echo json_encode(
+                    array(
+                        "title"=>"Error",
+                        "error"=>"Error occurred. User bio not edited!"
+                    )
+                );
+            }
+        }
+        else{
+        echo json_encode(
+                array(
+                    "title"=>"Message",
+                    "message"=>"User information not found!"
+                )
             );
-         } 
+        } 
       }
       // Token verification failed
       else{

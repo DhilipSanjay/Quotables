@@ -32,15 +32,15 @@ $Tags = new Tags($conn);
 if($data){
     try{
         $uid = $data->uid;
-        $username = $data->username;
-        $email = $data->email;
-
+        $username = mysqli_real_escape_string($conn, filter_var($data->username));
+        $email = mysqli_real_escape_string($conn, filter_var($data->email));
+        
         // Verify JWT token
         if($Auth->verifyToken($uid, $username, $email)){
             // Fetch all the tags of the user
             $tagsResult = $Tags->readUserTags($uid);
             $tagsArray = array();
-        
+
             while($row = $tagsResult->fetch_assoc())
             {
                 $tagsArray[] = $row;

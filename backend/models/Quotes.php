@@ -88,6 +88,9 @@ class Quotes{
         // Prepare statement
         $stmt = $this->conn->prepare($query);
 
+        if($author === "")
+            $author = "Anonymous";
+
         // Bind parameters
         $stmt->bind_param("iss", $uid, $quote, $author);
         
@@ -148,19 +151,18 @@ class Quotes{
 
         // Bind parameters
         $stmt->bind_param("iss", $uid, $quote, $author);
-        
         // Execute query
         $stmt->execute();
-
+        
         // Fetch results 
         $result = $stmt->get_result();
-
+        
         // Fetch row
         $row = $result->fetch_assoc();
         
         // Close the statement
         $stmt->close();
-
+        
         // Change the class variable qid and return true
         if($row){
             $this->qid = $row['qid'];
@@ -191,6 +193,37 @@ class Quotes{
 
         // Bind the parameters
         $stmt->bind_param("iiss", $uid, $qid, $quote, $author);
+        
+        // Execute the statement
+        if($stmt->execute())
+            return True;
+
+        printf("Error: %s\n", $stmt->error);
+
+        return false;
+    }
+
+    // Edit a quote from quotes table
+    public function quoteEdit($uid, $qid, $quote, $author){
+        // Query
+        $query = 'UPDATE 
+                ' . $this->table . '
+                SET
+                    quote = ?,
+                    author = ?
+                WHERE
+                    uid = ?
+                AND
+                    qid = ?';
+        
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
+        
+        if($author === "")
+            $author = "Anonymous";
+        
+        // Bind the parameters
+        $stmt->bind_param("ssii", $quote, $author, $uid, $qid);
 
         // Execute the statement
         if($stmt->execute())
