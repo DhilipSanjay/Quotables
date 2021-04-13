@@ -3,13 +3,15 @@ import ReactModal from 'react-modal';
 import Auth from '../services/auth';
 import Tags from './tags.jsx';
 import PostData from '../services/postData';
+import ApiResponse from '../common/apiResponse';
 
 class EditQuotesModal extends React.Component{  
     constructor(props){
         super(props);
         this.state = {
             newquote : undefined,
-            newauthor : undefined
+            newauthor : undefined,
+            response: {}
         }
         this.editQuote = this.editQuote.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -23,19 +25,19 @@ class EditQuotesModal extends React.Component{
                 && this.props.editQuotesData.author
                 && this.state.newquote 
                 && this.state.newauthor){
-                    const userData = Auth.getLocalData();
-                    const token = userData.token;
-                    delete userData.token;
+                const userData = Auth.getLocalData();
+                const token = userData.token;
+                delete userData.token;
 
-                    userData.qid = this.props.editQuotesData.qid;
-                    userData.oldquote = this.props.editQuotesData.quote;
-                    userData.oldauthor = this.props.editQuotesData.author;
-                    userData.newquote = this.state.newquote;
-                    userData.newauthor = this.state.newauthor;
-    
-                    await PostData('quotes/editQuotes.php', token, userData);
-                    console.log("Quote edited successfully.. closing the modal");
-                    this.props.closeModal();
+                userData.qid = this.props.editQuotesData.qid;
+                userData.oldquote = this.props.editQuotesData.quote;
+                userData.oldauthor = this.props.editQuotesData.author;
+                userData.newquote = this.state.newquote;
+                userData.newauthor = this.state.newauthor;
+
+                const postResponse = await PostData('quotes/editQuotes.php', token, userData);
+                this.setState({ response: postResponse})
+                console.log(this.state.response);
             }
             else{
                 console.log("Fill all the text boxes");
@@ -44,8 +46,8 @@ class EditQuotesModal extends React.Component{
     }
 
     static getDerivedStateFromProps(props, state){
-        if (props.editQuotesData.quote === undefined && 
-            props.editQuotesData.author === undefined) {
+        if (state.newquote === undefined && 
+            state.newauthor === undefined) {
             return {
                 newquote : props.editQuotesData.quote,
                 newauthor : props.editQuotesData.author
@@ -75,8 +77,8 @@ class EditQuotesModal extends React.Component{
             <input type="text" name="newauthor" placeholder="Author" value={this.state.newauthor} onChange={this.onChange}/>
             <br/>
             <Tags tags={this.props.editQuotesData.tags} />
-            <p>Cannot Edit Tags</p>
             <input type="submit" value="Edit Quote" onClick={this.editQuote}/>
+            <ApiResponse response={this.state.response}/>
             </ReactModal>
         );
     }

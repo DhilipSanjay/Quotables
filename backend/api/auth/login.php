@@ -35,8 +35,8 @@ if($data){
         else{
             echo json_encode(
                 array(
-                    "title"=>"Message",
-                    "message"=>"Invalid Credentials!"
+                    "title"=>"error",
+                    "error"=>"Invalid Credentials!"
                 )
             );
         }

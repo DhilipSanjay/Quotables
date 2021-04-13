@@ -22,8 +22,9 @@ class Auth{
     }
 
     async login(credentials){
+        let responseJSON;
         await PostCredentials('login.php', credentials).then((result) => {
-            let responseJSON = result;
+            responseJSON = result;
             
             if(responseJSON.userData){
                 localStorage.setItem('userData', JSON.stringify(responseJSON));
@@ -36,7 +37,7 @@ class Auth{
             }
         });
 
-        return this.authenticated;
+        return responseJSON;
     }
 
     logout(){

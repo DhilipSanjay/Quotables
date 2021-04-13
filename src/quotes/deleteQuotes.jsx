@@ -2,11 +2,12 @@ import React from 'react';
 import ReactModal from 'react-modal';
 import Auth from '../services/auth';
 import PostData from '../services/postData';
-
+import ApiResponse from '../common/apiResponse';
 
 class DeleteQuotesModal extends React.Component{  
     constructor(props){
         super(props);
+        this.state = {response : {}};
         this.deleteQuote = this.deleteQuote.bind(this);
     }
 
@@ -25,9 +26,9 @@ class DeleteQuotesModal extends React.Component{
                 userData.quote = this.props.deleteQuotesData.quote;
                 userData.author = this.props.deleteQuotesData.author;
 
-                await PostData('quotes/deleteQuotes.php', token, userData);
-                console.log("Quote deleted successfully.. closing the modal");
-                this.props.closeModal();
+                const postResponse = await PostData('quotes/deleteQuotes.php', token, userData);
+                this.setState({ response: postResponse})
+                console.log(this.state.response);
             }
             else{
                 console.log("Fill all the text boxes");
@@ -36,6 +37,7 @@ class DeleteQuotesModal extends React.Component{
 }
 
     render(){
+        
     return (
         <ReactModal 
             isOpen={this.props.showModal}
@@ -44,13 +46,22 @@ class DeleteQuotesModal extends React.Component{
         >
 
         <button onClick={this.props.closeModal}>Close</button>
-        <h2>Are you sure want to delete this quote?</h2>
-        <div>
-        <p>"{this.props.deleteQuotesData.quote}" <br/> Quote by {this.props.deleteQuotesData.author}</p>
-
-        </div>
-        <button onClick={this.deleteQuote}>Delete</button>
-        <button onClick={this.props.closeModal}>Cancel</button>
+        {
+            (this.state.response.hasOwnProperty("message") ||
+                this.state.response.hasOwnProperty("error"))
+            ? <ApiResponse response={this.state.response}/>
+            :
+            <div>
+                <h2>Are you sure want to delete this quote?</h2>
+                <div>
+                <p>"{this.props.deleteQuotesData.quote}" <br/> Quote by {this.props.deleteQuotesData.author}</p>
+    
+                </div>
+                <button onClick={this.deleteQuote}>Delete</button>
+                <button onClick={this.props.closeModal}>Cancel</button>
+            </div>
+        }
+        
         </ReactModal>
         );
     }

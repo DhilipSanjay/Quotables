@@ -2,6 +2,7 @@ import React from 'react';
 import ReactModal from 'react-modal';
 import Auth from '../services/auth';
 import PostData from '../services/postData';
+import ApiResponse from '../common/apiResponse';
 
 class ChangePasswordModal extends React.Component{  
     constructor(props){
@@ -9,7 +10,8 @@ class ChangePasswordModal extends React.Component{
         this.state = {
             oldpassword: '',
             newpassword: '',
-            confirmpassword: ''
+            confirmpassword: '',
+            response: {}
         }
         this.changePassword = this.changePassword.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -17,8 +19,11 @@ class ChangePasswordModal extends React.Component{
 
     async changePassword(){
         if(Auth.isAuthenticated()){
-            // Check if newbio not empty 
+            // Check if passwords are not empty
+            // Check newpassword equals confirmpassword
             if (this.state.oldpassword &&
+                this.state.newpassword &&
+                this.state.confirmpassword &&
                 this.state.newpassword === this.state.confirmpassword){
                 const userData = Auth.getLocalData();
                 const token = userData.token;
@@ -27,17 +32,17 @@ class ChangePasswordModal extends React.Component{
                 userData.oldpassword = this.state.oldpassword;
                 userData.newpassword = this.state.newpassword;
 
-                const response = await PostData('profile/changePassword.php', token, userData)
-                if(response.hasOwnProperty("Message")){
-                    console.log(response.message);
-                    this.props.closeModal();
-                }
-                else{
-                    console.log(response);
-                }
+                const postResponse = await PostData('profile/changePassword.php', token, userData)
+                this.setState({
+                    oldpassword: '',
+                    newpassword: '',
+                    confirmpassword: ''
+                })
+                this.setState({ response: postResponse})
+                console.log(this.state.response);
             }
             else{
-                console.log("Passwords don't match");
+                console.log("Fill all the fields / Passwords don't match");
             }
         }
     }
@@ -47,7 +52,8 @@ class ChangePasswordModal extends React.Component{
     }
 
     render(){
-        let passwordMatch = <br />
+        let passwordMatch = <br/>
+
         if( this.state.newpassword && this.state.confirmpassword) {
             passwordMatch=  (this.state.newpassword !== this.state.confirmpassword)
                 ? <p>Passwords don't match</p>
@@ -74,6 +80,7 @@ class ChangePasswordModal extends React.Component{
             <br/>
             {passwordMatch}
             <input type="submit" value="Change Password" onClick={this.changePassword}/>
+            <ApiResponse response={this.state.response}/>
             </ReactModal>
         )
     }

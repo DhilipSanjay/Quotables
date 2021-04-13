@@ -64,7 +64,7 @@ if($data){
                 echo json_encode(
                     array(
                         "title"=>"Error",
-                        "error"=>"Are you sure it's your quote?"
+                        "error"=>"Quote doesn't exist!"
                     )
                 );
             }

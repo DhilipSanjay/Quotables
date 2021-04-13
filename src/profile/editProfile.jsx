@@ -2,12 +2,14 @@ import React from 'react';
 import ReactModal from 'react-modal';
 import Auth from '../services/auth';
 import PostData from '../services/postData';
+import ApiResponse from '../common/apiResponse';
 
 class EditProfileModal extends React.Component{  
     constructor(props){
         super(props);
         this.state = {
             newbio : undefined,
+            response: {}
         }
         this.editProfile = this.editProfile.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -24,9 +26,9 @@ class EditProfileModal extends React.Component{
                 userData.bio = this.props.editProfileData.bio;
                 userData.newbio = this.state.newbio;
 
-                await PostData('profile/editProfile.php', token, userData);
-                console.log("Profile edited successfully.. closing the modal");
-                this.props.closeModal();
+                const postResponse = await PostData('profile/editProfile.php', token, userData);
+                this.setState({ response: postResponse})
+                console.log(this.state.response);
             }
             else{
                 console.log("Fill all the text boxes");
@@ -62,6 +64,7 @@ class EditProfileModal extends React.Component{
             <input type="text" name="newbio" placeholder="Bio" value={this.state.newbio} onChange={this.onChange}/>
             <br/>
             <input type="submit" value="Edit Profile" onClick={this.editProfile}/>
+            <ApiResponse response={this.state.response}/>
             </ReactModal>
         )
     }

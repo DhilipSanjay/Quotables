@@ -1,6 +1,7 @@
 import React from 'react';
 import Auth from '../services/auth';
 import Nav from '../common/nav';
+import ApiResponse from '../common/apiResponse';
 
 class Login extends React.Component{
     constructor(props){
@@ -8,6 +9,7 @@ class Login extends React.Component{
         this.state = {
             email: '',
             password: '',
+            response: {}
         }
         this.login = this.login.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -15,9 +17,16 @@ class Login extends React.Component{
 
     async login(){
         if(this.state.email && this.state.password){
-            await Auth.login(this.state)
+            const postResponse = await Auth.login(
+                {
+                    "email" : this.state.email,
+                    "password" : this.state.password
+                })
             if(Auth.isAuthenticated() && this.props.history !== undefined){
                 this.props.history.push("/quotes");
+            }
+            else{
+                this.setState({ response: postResponse})
             }
         }
         else{
@@ -40,6 +49,7 @@ class Login extends React.Component{
             <label>Password</label>
             <input type="password" name="password" placeholder="Password" onChange={this.onChange}/>
             <input type="submit" value="Login" onClick={this.login}/>
+            <ApiResponse response={this.state.response}/>
         </div>
         );
     }

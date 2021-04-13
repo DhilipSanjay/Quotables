@@ -68,7 +68,7 @@ if($data){
                 echo json_encode(
                     array(
                         "title"=>"Error",
-                        "message"=>"Invalid Password!"
+                        "error"=>"Invalid Password!"
                     )
                 );
             }

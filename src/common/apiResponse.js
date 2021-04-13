@@ -1,0 +1,25 @@
+import React from 'react';
+
+const ApiResponse = (props) => {
+    // Green Message
+    if(props.response.hasOwnProperty("message")){
+        return(
+            <div>
+                <p>{props.response.message}</p>
+            </div>
+        );
+    }
+
+    // Red Error
+    if(props.response.hasOwnProperty("error")){
+        return(
+            <div>
+                <p>{props.response.error}</p>
+            </div>
+        );
+    }
+
+    return null;
+}
+
+export default ApiResponse;
