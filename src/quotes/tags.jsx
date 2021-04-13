@@ -14,7 +14,7 @@ function Tags({tags}){
     }
     else{
         return (
-            <h3>Add some tags</h3>
+            <h3>Add some tags!!</h3>
         );
     }
         

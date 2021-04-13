@@ -56,7 +56,7 @@ class SignUp extends React.Component{
             <label>Bio</label>
             <input type="text" name="bio" placeholder="Short Bio" onChange={this.onChange}/>
             <br/>
-            <input type="submit" value="Login" onClick={this.signup}/>        
+            <input type="submit" value="Sign Up" onClick={this.signup}/>        
         </div>  
         );
     }

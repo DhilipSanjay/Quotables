@@ -3,7 +3,7 @@ import './../App.css'
 import {Link} from 'react-router-dom';
 import Auth from '../services/auth';
 
-const Nav = (props) => {
+const Nav = () => {
         return(
             <nav>
             <h2>Quotables</h2>

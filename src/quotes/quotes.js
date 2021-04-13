@@ -2,17 +2,26 @@ import React from 'react';
 import Nav from '../common/nav';
 import Auth from '../services/auth';
 import PostData from '../services/postData';
-
 import Tags from './tags.jsx';
 import AllTags from './allTags.jsx';
+import InsertQuotesModal from './insertQuotes';
+import DeleteQuotesModal from './deleteQuotes';
 
 class Quote extends React.Component { 
     _isMounted = false;
 
     constructor(props){
       super(props);
-      this.state = { isLoading : false, quotesdata : [], allTags : [] };
-      this.redirectFunction.bind(this);
+      this.state = {  isLoading : false, 
+                      quotesdata : [], 
+                      allTags : [] , 
+                      showInsertModal: false,
+                      deleteQuotesData: {}
+                    };
+      this.openInsertModal = this.openInsertModal.bind(this);
+      this.closeInsertModal = this.closeInsertModal.bind(this);
+      this.openDeleteModal = this.openDeleteModal.bind(this);
+      this.closeDeleteModal = this.closeDeleteModal.bind(this);
     }
     
     async componentDidMount() {
@@ -21,8 +30,8 @@ class Quote extends React.Component {
         const userData = Auth.getLocalData();
         const token = userData.token;
         delete userData.token;
-        const qjsonData = await PostData('Quotes/fetchQuotes.php', token, userData);
-        const tjsonData = await PostData('Tags/fetchTags.php', token, userData);
+        const qjsonData = await PostData('quotes/fetchQuotes.php', token, userData);
+        const tjsonData = await PostData('tags/fetchTags.php', token, userData);
         
         if(this._isMounted === true)
         {
@@ -35,10 +44,31 @@ class Quote extends React.Component {
       this._isMounted = false;
     }
 
-    redirectFunction(){
-      if(!Auth.isAuthenticated() && this.props.history !== undefined){
-        this.props.history.push("/login");
-      }
+    openInsertModal () {
+      this.setState({ showInsertModal: true });
+    }
+
+    closeInsertModal () {
+      this.setState({ showInsertModal: false });
+      window.location.reload();
+    }
+
+    openDeleteModal (quotesData) {
+      this.setState({ deleteQuotesData: quotesData,  showDeleteModal: true });
+    }
+
+    closeDeleteModal () {
+      this.setState({ editQuotesData: {}, showDeleteModal: false });
+      window.location.reload();
+    }
+
+    openEditModal (quotesData) {
+      this.setState({ editQuotesData: quotesData,  showDeleteModal: true });
+    }
+
+    closeEditModal () {
+      this.setState({ deleteQuotesData: {}, showDeleteModal: false });
+      window.location.reload();
     }
 
     render() {
@@ -71,8 +101,14 @@ class Quote extends React.Component {
       }
       return (
       <div>
-        <Nav redirectfn = {this.redirectFunction} />
+        <Nav />
         <h1> Quotes Page </h1>
+        <div>
+          <button onClick={this.openInsertModal}>Insert Quotes</button>
+          <InsertQuotesModal showModal={this.state.showInsertModal} closeModal={this.closeInsertModal} />
+          <DeleteQuotesModal deleteQuotesData={this.state.deleteQuotesData} showModal={this.state.showDeleteModal} closeModal={this.closeDeleteModal} />
+          <EditQuotesModal editQuotesData={this.state.editQuotesData} showModal={this.state.showEditModal} closeModal={this.closeEditModal} />
+        </div>
         {
           this.state.quotesdata.map(
             (quote,i) => (
@@ -80,10 +116,12 @@ class Quote extends React.Component {
               <h3>{quote.quote}</h3>
               <h5>{quote.author}</h5>
               <Tags tags={quote.tags} />
+              <button onClick={() => this.openDeleteModal(quote)}>Delete button</button>
               </div>
             )
           )
         }
+        <hr></hr>
         <AllTags allTags={this.state.allTags} />
       </div>
       );
