@@ -2,14 +2,16 @@ import React from 'react';
 import Auth from '../services/auth';
 import PostData from '../services/postData';
 import Nav from '../common/nav';
+import EditProfileModal from './editProfile';
 
 class Profile extends React.Component {  
   _isMounted = false;
 
   constructor(){
     super();
-    this.uid = 1;
-    this.state = { isLoading : true, profileData : [] };
+    this.state = { showEditModal: false , isLoading : true, profileData : [] };
+    this.openEditModal = this.openEditModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
   }
   
   async componentDidMount(){
@@ -31,8 +33,17 @@ class Profile extends React.Component {
     this._isMounted = false;
   }
 
+  openEditModal () {
+    this.setState({ showEditModal: true });
+  }
 
-    render() {
+  // Handles close for all the Modals
+  closeModal () {
+    this.setState({ showEditModal: false});
+    window.location.reload();
+  }
+
+  render() {
       if (this.state.isLoading){
         return (
           <div>
@@ -62,6 +73,8 @@ class Profile extends React.Component {
           <div>
             Tags {this.state.profileData.tagsCount}
           </div>
+          <EditProfileModal editProfileData={this.state.profileData} showModal={this.state.showEditModal} closeModal={this.closeModal}/>
+          <button onClick={this.openEditModal}>Edit Profile</button>
         </div>
       );
     }

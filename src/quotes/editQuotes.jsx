@@ -8,8 +8,8 @@ class EditQuotesModal extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            newquote : '',
-            newauthor : ''
+            newquote : undefined,
+            newauthor : undefined
         }
         this.editQuote = this.editQuote.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -44,8 +44,8 @@ class EditQuotesModal extends React.Component{
     }
 
     static getDerivedStateFromProps(props, state){
-        if (props.editQuotesData.quote !== state.newquote && 
-            props.editQuotesData.author !== state.newauthor) {
+        if (props.editQuotesData.quote === undefined && 
+            props.editQuotesData.author === undefined) {
             return {
                 newquote : props.editQuotesData.quote,
                 newauthor : props.editQuotesData.author
