@@ -69,17 +69,19 @@ class ChangePasswordModal extends React.Component{
             
             <h1>Change Password</h1>
             <h2>{this.props.editProfileData.username}</h2>
-            <label>Old Password</label>
-            <input type="password" name="oldpassword" placeholder="Old Password" onChange={this.onChange}/>
-            <br/>
-            <label>New Password</label>
-            <input type="password" name="newpassword" placeholder="New Password" onChange={this.onChange}/>
-            <br/>
-            <label>Confirm Password</label>
-            <input type="password" name="confirmpassword" placeholder="Confirm Password" onChange={this.onChange}/>
-            <br/>
-            {passwordMatch}
-            <input type="submit" value="Change Password" onClick={this.changePassword}/>
+            <form>
+                <label>Old Password</label>
+                <input type="password" name="oldpassword" placeholder="Old Password" onChange={this.onChange} required/>
+                <br/>
+                <label>New Password</label>
+                <input type="password" name="newpassword" placeholder="New Password" onChange={this.onChange} required/>
+                <br/>
+                <label>Confirm Password</label>
+                <input type="password" name="confirmpassword" placeholder="Confirm Password" onChange={this.onChange} required/>
+                <br/>
+                {passwordMatch}
+                <input type="submit" value="Change Password" onClick={this.changePassword}/>
+            </form>
             <ApiResponse response={this.state.response}/>
             </ReactModal>
         )

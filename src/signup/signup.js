@@ -20,18 +20,18 @@ class SignUp extends React.Component{
     }
 
     async signup(){
-        if(this.state.email 
+        if( this.state.email 
             && this.state.password
             && this.state.username 
             && this.state.bio){
-                if(await Auth.signup(this.state))
-                {
-                    console.log("Successfully registered... redirecting to login page");
-                    this.props.history.push("/login");
-                }
-                else{
-                    console.log("Some error occurred. Try again");
-                }
+            if(await Auth.signup(this.state))
+            {
+                console.log("Successfully registered... redirecting to login page");
+                this.props.history.push("/login");
+            }
+            else{
+                console.log("Some error occurred. Try again");
+            }
                
         }
         else{
@@ -44,19 +44,21 @@ class SignUp extends React.Component{
         <div>
             <Nav />
             <h1>Sign Up</h1>
-            <label>Email</label>
-            <input type="text" name="email" placeholder="Email" onChange={this.onChange}/>
-            <br/>
-            <label>User name</label>
-            <input type="text" name="username" placeholder="User Name" onChange={this.onChange}/>
-            <br/>
-            <label>Password</label>
-            <input type="password" name="password" placeholder="Password" onChange={this.onChange}/>
-            <br/>
-            <label>Bio</label>
-            <input type="text" name="bio" placeholder="Short Bio" onChange={this.onChange}/>
-            <br/>
-            <input type="submit" value="Sign Up" onClick={this.signup}/>        
+            <form>
+                <label>Email</label>
+                <input type="email" name="email" placeholder="Email" onChange={this.onChange} required/>
+                <br/>
+                <label>User name</label>
+                <input type="text" name="username" placeholder="User Name" onChange={this.onChange} required/>
+                <br/>
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Password" onChange={this.onChange} required/>
+                <br/>
+                <label>Bio</label>
+                <input type="text" name="bio" placeholder="Short Bio" onChange={this.onChange} required/>
+                <br/>
+                <input type="submit" value="Sign Up" onClick={this.signup}/>        
+            </form>
         </div>  
         );
     }

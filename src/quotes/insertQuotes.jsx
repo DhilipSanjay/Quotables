@@ -23,14 +23,17 @@ class InsertQuotesModal extends React.Component{
         this.setState({ [e.target.name]: e.target.value })
     }
 
-    addTagInput(){
+    addTagInput(e){
+        e.preventDefault();
         // Update the tags
         const updatedTags = this.state.tags;
-        updatedTags.push(this.state.tagInput);
+        if(this.state.tagInput){
+            updatedTags.push(this.state.tagInput);
 
-        // Set state
-        this.setState({ tags : updatedTags, tagInput : ''});
-        document.querySelector('.tagInput').value = "";
+            // Set state
+            this.setState({ tags : updatedTags, tagInput : ''});
+            document.querySelector('.tagInput').value = "";
+        }   
     }
 
     async saveQuote(){
@@ -71,28 +74,30 @@ class InsertQuotesModal extends React.Component{
                 :
                 <div>
                     <h1>Insert Quotes</h1>
-                    <label>Quote</label>
-                    <input type="text" name="quote" placeholder="Quote" onChange={this.onChange}/>
-                    <br/>
-                    <label>Author</label>
-                    <input type="text" name="author" placeholder="Author" onChange={this.onChange}/>
-                    <br/>
-                    <ul className="tag-list">
-                    {
-                        this.state.tags.map((tag, index) =>
-                        <li key={index}>
-                        {tag}
-                        </li>
-                        )
-                    }
-                    </ul>
-                    <label>Tag</label>
-                    <input type="text" className="tagInput" name="tagInput" placeholder="Tag" onChange={this.onChange}/>
-                    <button onClick={this.addTagInput}>Add Tag</button>
-                    <br />
-                    <input type="submit" value="Save Quote" onClick={this.saveQuote}/>
+                    <form>
+                        <label>Quote</label>
+                        <input type="text" name="quote" placeholder="Quote" onChange={this.onChange} required/>
+                        <br/>
+                        <label>Author</label>
+                        <input type="text" name="author" placeholder="Author" onChange={this.onChange} required/>
+                        <br/>
+                        <ul className="tag-list">
+                        {
+                            this.state.tags.map((tag, index) =>
+                            <li key={index}>
+                            {tag}
+                            </li>
+                            )
+                        }
+                        </ul>
+                        <label>Tag</label>
+                        <input type="text" className="tagInput" name="tagInput" placeholder="Tag" onChange={this.onChange}/>
+                        <button onClick={this.addTagInput}>Add Tag</button>
+                        <br />
+                        <input type="submit" value="Save Quote" onClick={this.saveQuote}/>
+                    </form>
                 </div>
-        }
+            }
             </ReactModal>
         );
     }

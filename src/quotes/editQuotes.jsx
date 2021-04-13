@@ -17,7 +17,7 @@ class EditQuotesModal extends React.Component{
         this.onChange = this.onChange.bind(this);
     }
 
-    async editQuote(){
+    async editQuote(e){
         if(Auth.isAuthenticated()){
             // Check if qid, newquote, newauthor, oldquote and oldauthor are not empty 
             if (this.props.editQuotesData.qid
@@ -69,15 +69,17 @@ class EditQuotesModal extends React.Component{
             >
             <button onClick={this.props.closeModal}>Close</button>
             
-            <h1>Insert Quotes</h1>
-            <label>Quote</label>
-            <input type="text" name="newquote" placeholder="Quote" value={this.state.newquote} onChange={this.onChange}/>
-            <br/>
-            <label>Author</label>
-            <input type="text" name="newauthor" placeholder="Author" value={this.state.newauthor} onChange={this.onChange}/>
-            <br/>
-            <Tags tags={this.props.editQuotesData.tags} />
-            <input type="submit" value="Edit Quote" onClick={this.editQuote}/>
+            <h1>Edit Quote</h1>
+            <form>
+                <label>Quote</label>
+                <input type="text" name="newquote" placeholder="Quote" value={this.state.newquote} onChange={this.onChange} required/>
+                <br/>
+                <label>Author</label>
+                <input type="text" name="newauthor" placeholder="Author" value={this.state.newauthor} onChange={this.onChange} required/>
+                <br/>
+                <Tags tags={this.props.editQuotesData.tags} />
+                <input type="submit" value="Edit Quote" onClick={this.editQuote}/>
+            </form>
             <ApiResponse response={this.state.response}/>
             </ReactModal>
         );

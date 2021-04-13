@@ -15,7 +15,8 @@ class Login extends React.Component{
         this.onChange = this.onChange.bind(this);
     }
 
-    async login(){
+    async login(e){
+        e.preventDefault();
         if(this.state.email && this.state.password){
             const postResponse = await Auth.login(
                 {

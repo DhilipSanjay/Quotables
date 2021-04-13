@@ -7,6 +7,7 @@ import AllTags from './allTags.jsx';
 import InsertQuotesModal from './insertQuotes';
 import DeleteQuotesModal from './deleteQuotes';
 import EditQuotesModal from './editQuotes';
+import ApiResponse from '../common/apiResponse';
 
 class Quote extends React.Component { 
     _isMounted = false;
@@ -78,25 +79,7 @@ class Quote extends React.Component {
           </div>
         );
       }
-        // console.log(allTags);
-      if(this.state.quotesdata.hasOwnProperty('error')){
-        return(
-          <div>
-            <Nav />
-            <h2>"Oops! Some error Occured! Try again after sometime"</h2>
-          </div>
 
-        );
-      }
-      if(this.state.quotesdata.hasOwnProperty('message') ){
-        return(
-          <div>
-            <Nav />
-            <h2>{this.state.quotesdata.message}</h2>
-          </div>
-
-        );
-      }
       return (
       <div>
         <Nav />
@@ -108,20 +91,27 @@ class Quote extends React.Component {
           <EditQuotesModal editQuotesData={this.state.editQuotesData} showModal={this.state.showEditModal} closeModal={this.closeModal} />
         </div>
         {
-          this.state.quotesdata.map(
-            (quote,i) => (
-              <div key={i}>
-              <h3>{quote.quote}</h3>
-              <h5>{quote.author}</h5>
-              <Tags tags={quote.tags} />
-              <button onClick={() => this.openDeleteModal(quote)}>Delete button</button>
-              <button onClick={() => this.openEditModal(quote)}>Edit button</button>
-              </div>
-            )
-          )
+          (this.state.quotesdata.hasOwnProperty("message") ||
+            this.state.quotesdata.hasOwnProperty("error"))
+          ? <ApiResponse response={this.state.quotesdata}/>
+          : <div>
+            {
+              this.state.quotesdata.map(
+                (quote,i) => (
+                <div key={i}>
+                  <h3>{quote.quote}</h3>
+                  <h5>{quote.author}</h5>
+                  <Tags tags={quote.tags} />
+                  <button onClick={() => this.openDeleteModal(quote)}>Delete button</button>
+                  <button onClick={() => this.openEditModal(quote)}>Edit button</button>
+                </div>
+                
+              ))
+            }
+              <hr></hr>
+              <AllTags allTags={this.state.allTags} />
+            </div>
         }
-        <hr></hr>
-        <AllTags allTags={this.state.allTags} />
       </div>
       );
   }

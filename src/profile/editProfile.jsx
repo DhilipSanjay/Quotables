@@ -60,10 +60,12 @@ class EditProfileModal extends React.Component{
             
             <h1>Edit Profile</h1>
             <h2>{this.props.editProfileData.username}</h2>
-            <label>Bio</label>
-            <input type="text" name="newbio" placeholder="Bio" value={this.state.newbio} onChange={this.onChange}/>
-            <br/>
-            <input type="submit" value="Edit Profile" onClick={this.editProfile}/>
+            <form>
+                <label>Bio</label>
+                <input type="text" name="newbio" placeholder="Bio" value={this.state.newbio} onChange={this.onChange} required/>
+                <br/>
+                <input type="submit" value="Edit Profile" onClick={this.editProfile}/>
+            </form>
             <ApiResponse response={this.state.response}/>
             </ReactModal>
         )

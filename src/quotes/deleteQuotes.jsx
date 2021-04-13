@@ -54,7 +54,7 @@ class DeleteQuotesModal extends React.Component{
             <div>
                 <h2>Are you sure want to delete this quote?</h2>
                 <div>
-                <p>"{this.props.deleteQuotesData.quote}" <br/> Quote by {this.props.deleteQuotesData.author}</p>
+                <p>"{this.props.deleteQuotesData.quote}" <br/> by {this.props.deleteQuotesData.author}</p>
     
                 </div>
                 <button onClick={this.deleteQuote}>Delete</button>
