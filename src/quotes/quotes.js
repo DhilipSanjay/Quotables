@@ -6,6 +6,7 @@ import Tags from './tags.jsx';
 import AllTags from './allTags.jsx';
 import InsertQuotesModal from './insertQuotes';
 import DeleteQuotesModal from './deleteQuotes';
+import EditQuotesModal from './editQuotes';
 
 class Quote extends React.Component { 
     _isMounted = false;
@@ -16,12 +17,15 @@ class Quote extends React.Component {
                       quotesdata : [], 
                       allTags : [] , 
                       showInsertModal: false,
-                      deleteQuotesData: {}
+                      showDeleteModal: false,
+                      showEditModal: false,
+                      deleteQuotesData: {},
+                      editQuotesData: {}
                     };
       this.openInsertModal = this.openInsertModal.bind(this);
-      this.closeInsertModal = this.closeInsertModal.bind(this);
       this.openDeleteModal = this.openDeleteModal.bind(this);
-      this.closeDeleteModal = this.closeDeleteModal.bind(this);
+      this.openEditeModal = this.openEditModal.bind(this);
+      this.closeModal = this.closeModal.bind(this);
     }
     
     async componentDidMount() {
@@ -48,26 +52,20 @@ class Quote extends React.Component {
       this.setState({ showInsertModal: true });
     }
 
-    closeInsertModal () {
-      this.setState({ showInsertModal: false });
-      window.location.reload();
-    }
-
     openDeleteModal (quotesData) {
       this.setState({ deleteQuotesData: quotesData,  showDeleteModal: true });
     }
 
-    closeDeleteModal () {
-      this.setState({ editQuotesData: {}, showDeleteModal: false });
-      window.location.reload();
-    }
-
     openEditModal (quotesData) {
-      this.setState({ editQuotesData: quotesData,  showDeleteModal: true });
+      this.setState({ editQuotesData: quotesData,  showEditModal: true });
     }
 
-    closeEditModal () {
-      this.setState({ deleteQuotesData: {}, showDeleteModal: false });
+    // Handles close for all the Modal
+    closeModal () {
+      this.setState({ editQuotesData: {}, showEditModal: false,
+                      deleteQuotesData: {}, showDeleteModal: false,
+                      showInsertModal: false
+                    });
       window.location.reload();
     }
 
@@ -105,9 +103,9 @@ class Quote extends React.Component {
         <h1> Quotes Page </h1>
         <div>
           <button onClick={this.openInsertModal}>Insert Quotes</button>
-          <InsertQuotesModal showModal={this.state.showInsertModal} closeModal={this.closeInsertModal} />
-          <DeleteQuotesModal deleteQuotesData={this.state.deleteQuotesData} showModal={this.state.showDeleteModal} closeModal={this.closeDeleteModal} />
-          <EditQuotesModal editQuotesData={this.state.editQuotesData} showModal={this.state.showEditModal} closeModal={this.closeEditModal} />
+          <InsertQuotesModal showModal={this.state.showInsertModal} closeModal={this.closeModal} />
+          <DeleteQuotesModal deleteQuotesData={this.state.deleteQuotesData} showModal={this.state.showDeleteModal} closeModal={this.closeModal} />
+          <EditQuotesModal editQuotesData={this.state.editQuotesData} showModal={this.state.showEditModal} closeModal={this.closeModal} />
         </div>
         {
           this.state.quotesdata.map(
@@ -117,6 +115,7 @@ class Quote extends React.Component {
               <h5>{quote.author}</h5>
               <Tags tags={quote.tags} />
               <button onClick={() => this.openDeleteModal(quote)}>Delete button</button>
+              <button onClick={() => this.openEditModal(quote)}>Edit button</button>
               </div>
             )
           )
