@@ -33,10 +33,6 @@ class EditProfileModal extends React.Component{
             }
         }
     }
-
-    async changePassword(){
-        
-    }
     
     static getDerivedStateFromProps(props, state){
         if (state.newbio === undefined) {
@@ -66,7 +62,6 @@ class EditProfileModal extends React.Component{
             <input type="text" name="newbio" placeholder="Bio" value={this.state.newbio} onChange={this.onChange}/>
             <br/>
             <input type="submit" value="Edit Profile" onClick={this.editProfile}/>
-            <input type="submit" value="Change Password" onClick={this.changePassword}/>
             </ReactModal>
         )
     }

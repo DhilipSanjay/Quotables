@@ -3,14 +3,19 @@ import Auth from '../services/auth';
 import PostData from '../services/postData';
 import Nav from '../common/nav';
 import EditProfileModal from './editProfile';
+import ChangePasswordModal from './changePassword'
 
 class Profile extends React.Component {  
   _isMounted = false;
 
   constructor(){
     super();
-    this.state = { showEditModal: false , isLoading : true, profileData : [] };
+    this.state = {  showEditModal: false, 
+                    showChangePasswordModal: false, 
+                    isLoading : true, 
+                    profileData : [] };
     this.openEditModal = this.openEditModal.bind(this);
+    this.openChangePasswordModal = this.openChangePasswordModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
   }
   
@@ -37,9 +42,14 @@ class Profile extends React.Component {
     this.setState({ showEditModal: true });
   }
 
+  openChangePasswordModal(){
+    this.setState({ showChangePasswordModal: true })
+  }
+
   // Handles close for all the Modals
   closeModal () {
-    this.setState({ showEditModal: false});
+    this.setState({ showEditModal: false, 
+                    showChangePasswordModal: false});
     window.location.reload();
   }
 
@@ -74,7 +84,9 @@ class Profile extends React.Component {
             Tags {this.state.profileData.tagsCount}
           </div>
           <EditProfileModal editProfileData={this.state.profileData} showModal={this.state.showEditModal} closeModal={this.closeModal}/>
+          <ChangePasswordModal editProfileData={this.state.profileData} showModal={this.state.showChangePasswordModal} closeModal={this.closeModal}/>
           <button onClick={this.openEditModal}>Edit Profile</button>
+          <button onClick={this.openChangePasswordModal}>Change Password</button>
         </div>
       );
     }

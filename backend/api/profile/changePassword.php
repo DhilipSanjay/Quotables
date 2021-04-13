@@ -42,24 +42,37 @@ if($data){
          // Check if user profile exists
         if($Profile->read($uid)){
 
-            // Update user profile
-            if($Profile->changePassword($uid, $email, $oldpasswd, $newpasswd)){
-                echo json_encode(
-                    array(
-                        "title"=>"Message",
-                        "message"=>"User Password changed successfully!"
-                    )
-                );
-            }
+            // Verifiy email and old password
+            if($Auth->verifyEmailPassword($email, $oldpasswd)){
+                
+                // Update user password
+                if($Profile->changePassword($uid, $email, $oldpasswd, $newpasswd)){
+                    echo json_encode(
+                        array(
+                            "title"=>"Message",
+                            "message"=>"User Password changed successfully!"
+                        )
+                    );
+                }
             // Error occured while creating profile
+                else{
+                    echo json_encode(
+                        array(
+                            "title"=>"Error",
+                            "error"=>"Error occurred. User Password not changed!"
+                        )
+                    );
+                }
+            }
             else{
                 echo json_encode(
                     array(
                         "title"=>"Error",
-                        "error"=>"Error occurred. User Password not changed!"
+                        "message"=>"Invalid Password!"
                     )
                 );
             }
+
         }
         else{
         echo json_encode(
