@@ -15,7 +15,6 @@ class EditQuotesModal extends React.Component{
         this.onChange = this.onChange.bind(this);
     }
 
-
     async editQuote(){
         if(Auth.isAuthenticated()){
             // Check if qid, newquote, newauthor, oldquote and oldauthor are not empty 
