@@ -6,7 +6,10 @@ import Auth from '../services/auth';
 const Nav = () => {
         return(
             <nav>
+            <Link to="/quotes">
             <h2>Quotables</h2>
+            </Link>
+            
             <ul className="nav-links">
                 {
                     Auth.isAuthenticated() && 
