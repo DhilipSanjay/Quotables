@@ -111,6 +111,34 @@ class Profile{
         return false;
     }
 
+    function changePassword($uid, $email, $oldpasswd, $newpasswd){
+        $query = 'UPDATE 
+                ' . $this->table . '
+                SET
+                    passwd = ?
+                WHERE
+                    uid = ?
+                AND
+                    email = ?
+                AND
+                    passwd = ?';
+
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
+        
+        // Bind the parameters
+        $stmt->bind_param("siss", $newpasswd, $uid, $email, $oldpasswd);
+
+        // Execute the statement
+        if($stmt->execute())
+            return True;
+
+        printf("Error: %s\n", $stmt->error);
+
+        return false;
+    }
+
+
 }
 
 ?>
