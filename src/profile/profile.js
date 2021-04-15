@@ -1,7 +1,6 @@
 import React from 'react';
 import Auth from '../services/auth';
 import PostData from '../services/postData';
-import Nav from '../common/nav';
 import EditProfileModal from './editProfile';
 import ChangePasswordModal from './changePassword'
 
@@ -57,7 +56,6 @@ class Profile extends React.Component {
       if (this.state.isLoading){
         return (
           <div>
-            <Nav />
             Loading...
           </div>
         );
@@ -66,14 +64,12 @@ class Profile extends React.Component {
       if(this.state.userData){
         return(
           <div>
-            <Nav />
             <h2>"Oops! Some error Occured! Try again after sometime"</h2>
           </div>
         );
       }
       return (
         <div>
-          <Nav />
           <h1> Profile Page </h1>
           <h2>{this.state.profileData.username}</h2>
           <h3>{this.state.profileData.bio}</h3>

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router';
 import Auth from '../services/auth'
-import Nav from '../common/nav';
 import { Link } from 'react-router-dom';
 
 class Home extends React.Component{
@@ -11,8 +10,8 @@ class Home extends React.Component{
             return <Redirect to="/quotes" />;
         }
         return (
-        <div className="md:container md:mx-auto">
-            <Nav />
+        <div>
+            <div className="md:container md:mx-auto">
             <div className="bg-white h-screen flex flex-col justify-center items-center">
                 <h1 className="title">
                     QUOTABLES
@@ -27,6 +26,7 @@ class Home extends React.Component{
                     <svg className="w-6 h-6 ml-4 mt-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
                 </Link>
             </div>
+        </div>
         </div>
         );
     }

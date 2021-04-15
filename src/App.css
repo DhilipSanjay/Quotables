@@ -8,7 +8,11 @@
     }
 
     .small-btn{
-        @apply p-2 mx-2 text-lg bg-primary rounded-full hover:bg-primaryDarker transition duration-300 ease-in-out; ;
+        @apply p-2 mx-2 text-lg bg-primary rounded-full hover:bg-primaryDarker transition duration-300 ease-in-out ;
+    }
+
+    .square-btn{
+        @apply bg-primary hover:bg-primaryDarker text-white font-bold py-2 px-4 rounded cursor-pointer;
     }
 
     .title{
@@ -16,7 +20,7 @@
     }
 
     .main-text{
-        @apply lg:text-3xl md:text-3xl sm:text-2xl text-2xl text-center;
+        @apply lg:text-3xl md:text-3xl sm:text-2xl text-2xl text-center font-semibold;
     }
 
     .success-msg{
@@ -25,6 +29,14 @@
 
     .error-msg{
         @apply p-4 border rounded-xl border-red-700 bg-red-100 text-center text-red-600;
+    }
+
+    .text-box{
+        @apply shadow appearance-none border-primary border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight;
+    }
+
+    .label-text{
+        @apply block text-gray-700 text-sm font-bold mb-2
     }
 
 }

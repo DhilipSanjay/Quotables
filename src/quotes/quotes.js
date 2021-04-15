@@ -1,5 +1,4 @@
 import React from 'react';
-import Nav from '../common/nav';
 import Auth from '../services/auth';
 import PostData from '../services/postData';
 import Tags from './tags.jsx';
@@ -74,15 +73,13 @@ class Quote extends React.Component {
       if (this.state.isLoading){
         return (
           <div>
-            <Nav />
             Loading...
           </div>
         );
       }
 
       return (
-      <div>
-        <Nav />
+      <div class="container">
         <h1> Quotes Page </h1>
         <div>
           <button onClick={this.openInsertModal}>Insert Quotes</button>
