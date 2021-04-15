@@ -6,19 +6,14 @@ class Auth{
     }
 
     async signup(userDetails){
+        let responseJSON;
         const isRegistered = await PostCredentials('signup.php', userDetails).then((result) => {
-            let responseJSON = result;
-            if(responseJSON.message){
-                console.log(responseJSON);
-                return true;
-            }
-            else{
-                console.log(responseJSON);
-                return false;
-            }
+            responseJSON = result;
+            console.log(responseJSON);
+            this.authenticated = false;
         });
 
-        return isRegistered;
+        return responseJSON;
     }
 
     async login(credentials){

@@ -74,7 +74,7 @@ class EditQuotesModal extends React.Component{
             <div className="main-text border-b-2 border-primary">Edit Quote</div>
             <form className="pt-4 pb-4 mb-1 mt-2">
                 <label className="label-text">Quote</label>
-                <textarea className="text-box" type="text" name="newquote" placeholder="Quote" maxlength="200" value={this.state.newquote} onChange={this.onChange} required/>
+                <textarea className="text-box" type="text" name="newquote" placeholder="Quote" maxLength="200" value={this.state.newquote} onChange={this.onChange} required/>
                 <br/>
                 <label className="label-text">Author</label>
                 <input className="text-box" type="text" name="newauthor" placeholder="Author" value={this.state.newauthor} onChange={this.onChange} required/>

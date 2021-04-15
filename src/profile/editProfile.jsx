@@ -69,7 +69,7 @@ class EditProfileModal extends React.Component{
                 <input className="text-box text-gray-400" type="email" value={this.props.editProfileData.email} readOnly required/>
                 <br/>
                 <label className="label-text">Bio</label>
-                <textarea className="text-box" type="text" name="newbio" placeholder="Bio" value={this.state.newbio} onChange={this.onChange} required/>
+                <textarea className="text-box" type="text" name="newbio" placeholder="Bio" maxLength="200" value={this.state.newbio} onChange={this.onChange} required/>
                 <br/>
                 
                 <div className="mt-4 pt-4 border-t-2 border-primary flex flex-row gap-2 justify-end">

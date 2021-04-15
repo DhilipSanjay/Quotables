@@ -35,15 +35,12 @@ class SignUp extends React.Component{
             userData.username = this.state.username;
             userData.bio = this.state.bio;
 
-            if(await Auth.signup(userData))
+            const postMessage = await Auth.signup(userData);
+            this.setState({ response: postMessage});
+            if(postMessage.hasOwnProperty("message"))
             {
-                this.setState({response: {"message": "Registered Successfully"}});
                 setTimeout(() => {this.props.history.push("/login")}, 3000);
             }
-            else{
-                this.setState({ response: {"error": "Some error Occurred. Try again!"}});
-            }
-               
         }
         else{
             this.setState({ response: {"error": "Fill out all the fields!"}});
@@ -88,7 +85,7 @@ class SignUp extends React.Component{
                 <label className="label-text">
                     Bio
                 </label>
-                <textarea className="text-box" name="bio" type="text" placeholder="Bio" maxlength="200" onChange={this.onChange} required/>
+                <textarea className="text-box" name="bio" type="text" placeholder="Bio" maxLength="200" onChange={this.onChange} required/>
                 </div>
                 
                 <div className="flex items-center justify-center">

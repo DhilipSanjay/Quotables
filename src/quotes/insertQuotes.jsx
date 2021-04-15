@@ -74,10 +74,10 @@ class InsertQuotesModal extends React.Component{
                 ? <ApiResponse response={this.state.response}/>
                 :
                 <div>
-                    <div className="main-text border-b-2 border-primary">Add Quote</div>
+                    <div className="main-text border-b-2 border-primary">Add a Quote</div>
                     <form className="pt-4 pb-4 mb-1 mt-2">
                         <label className="label-text">Quote</label>
-                        <textarea className="text-box" type="text" name="quote" placeholder="Quote" onChange={this.onChange} maxlength="200" required/>
+                        <textarea className="text-box" type="text" name="quote" placeholder="Quote" onChange={this.onChange} maxLength="200" required/>
                         <br/>
                         <label className="label-text">Author</label>
                         <input className="text-box" type="text" name="author" placeholder="Author" onChange={this.onChange} required/>
