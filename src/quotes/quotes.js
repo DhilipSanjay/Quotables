@@ -79,36 +79,48 @@ class Quote extends React.Component {
       }
 
       return (
-      <div class="container">
-        <h1> Quotes Page </h1>
-        <div>
-          <button onClick={this.openInsertModal}>Insert Quotes</button>
-          <InsertQuotesModal showModal={this.state.showInsertModal} closeModal={this.closeModal} />
-          <DeleteQuotesModal deleteQuotesData={this.state.deleteQuotesData} showModal={this.state.showDeleteModal} closeModal={this.closeModal} />
-          <EditQuotesModal editQuotesData={this.state.editQuotesData} showModal={this.state.showEditModal} closeModal={this.closeModal} />
-        </div>
-        {
-          (this.state.quotesdata.hasOwnProperty("message") ||
-            this.state.quotesdata.hasOwnProperty("error"))
-          ? <ApiResponse response={this.state.quotesdata}/>
-          : <div>
-            {
-              this.state.quotesdata.map(
-                (quote,i) => (
-                <div key={i}>
-                  <h3>{quote.quote}</h3>
-                  <h5>{quote.author}</h5>
-                  <Tags tags={quote.tags} />
-                  <button onClick={() => this.openDeleteModal(quote)}>Delete button</button>
-                  <button onClick={() => this.openEditModal(quote)}>Edit button</button>
-                </div>
-                
-              ))
-            }
-              <hr></hr>
-              <AllTags allTags={this.state.allTags} />
-            </div>
+      <div className="grid lg:grid-cols-3 sm:grid-rows-2 text-center items-center">
+      <div class="w-full max-w-screen-lg container col-span-2">
+          <div className="main-text mb-4">Quotes</div>
+          <div className="m-4">
+            <button className="square-btn" onClick={this.openInsertModal}>Insert Quotes</button>
+            <InsertQuotesModal showModal={this.state.showInsertModal} closeModal={this.closeModal} />
+            <DeleteQuotesModal deleteQuotesData={this.state.deleteQuotesData} showModal={this.state.showDeleteModal} closeModal={this.closeModal} />
+            <EditQuotesModal editQuotesData={this.state.editQuotesData} showModal={this.state.showEditModal} closeModal={this.closeModal} />
+          </div>
+          {
+            (this.state.quotesdata.hasOwnProperty("message") ||
+              this.state.quotesdata.hasOwnProperty("error"))
+            ? <ApiResponse response={this.state.quotesdata}/>
+            : <div className="flex flex-col space-y-4 m-8">
+              {
+                this.state.quotesdata.map(
+                  (quote,i) => (
+                  <div className="grid grid-rows-3 border border-primary p-4" key={i}>
+                    <h3>{quote.quote}</h3>
+                    <h5>{quote.author}</h5>
+                    <div>
+                      <Tags tags={quote.tags} />
+                    
+                    
+                    <button className="square-btn" onClick={() => this.openEditModal(quote)}>
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                    </button>
+                    
+                    <button className="square-btn" onClick={() => this.openDeleteModal(quote)}>
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                    </button>
+                    </div>
+                  </div>
+                  
+                ))
+              }
+              </div>
         }
+        </div>
+      <div className="w-full max-w-xs container lg:self-start item-center">
+        <AllTags allTags={this.state.allTags} />
+      </div>
       </div>
       );
   }

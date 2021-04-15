@@ -52,16 +52,16 @@ class Login extends React.Component{
             <p className="main-text">Login to Quotables</p>
             <form className="bg-background shadow-md rounded px-8 pt-6 pb-8 mb-4 mt-10">
                 <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
+                <label className="label-text">
                     Email
                 </label>
-                <input className="shadow appearance-none border-primary border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="email" type="email" placeholder="Email" onChange={this.onChange} required/>
+                <input className="text-box" name="email" type="email" placeholder="Email" onChange={this.onChange} required/>
                 </div>
                 <div className="mb-6">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
+                <label className="label-text">
                     Password
                 </label>
-                <input className="shadow appearance-none border border-primary rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" name="password" type="password" placeholder="Password"  onChange={this.onChange} required/>
+                <input className="text-box" name="password" type="password" placeholder="Password"  onChange={this.onChange} required/>
                 </div>
                 <div className="flex items-center justify-center">
                 <input className="square-btn" type="submit" value="Login" onClick={this.login} />

@@ -57,7 +57,7 @@ class SignUp extends React.Component{
                 <label className="label-text">
                     Username
                 </label>
-                <input className="text-box" name="username" type="text" placeholder="username" onChange={this.onChange} required/>
+                <input className="text-box" name="username" type="text" placeholder="Username" onChange={this.onChange} required/>
                 </div>
                 
                 <div className="mb-4">

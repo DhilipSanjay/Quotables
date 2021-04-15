@@ -3,7 +3,7 @@ import Tags from './tags';
 
 const AllTags = ({allTags}) => (
     <div>
-    <h3>Your Tags</h3>
+    <div className="main-text">Your Tags</div>
     <Tags tags={allTags}/>
     </div>
 
