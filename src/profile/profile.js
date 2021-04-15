@@ -72,7 +72,7 @@ class Profile extends React.Component {
         <div className="my-3 mx-auto w-full max-w-screen-lg container grid gap-y-4 justify-items-center">
          <div className="main-text mb-4">Profile</div>
           <div className="bg-secondary text-white text-6xl font-semibold rounded-full h-12 w-12 flex items-center justify-center p-16">
-            DS
+            {this.state.profileData.username[0]}
             </div>
 
           <div className="main-text">{this.state.profileData.username}</div>
