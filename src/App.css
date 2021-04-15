@@ -4,7 +4,7 @@
 
 @layer components{
     .main-btn{
-        @apply py-6 px-10 bg-primary rounded-full lg:text-3xl md:text-2xl sm:text-2xl text-2xl hover:bg-primaryDarker transition duration-300 ease-in-out flex items-start animate-bounce;
+        @apply py-6 px-10 text-white bg-primary rounded-full lg:text-3xl md:text-2xl sm:text-2xl text-2xl hover:bg-primaryDarker transition duration-300 ease-in-out flex items-start animate-bounce;
     }
 
     .small-btn{

@@ -16,7 +16,7 @@ class Home extends React.Component{
                 <h1 className="title">
                     QUOTABLES
                 </h1>
-                <div className="p-4 lg:text-5xl md:text-3xl sm:text-2xl text-2xl text-center text-secondary mb-10">
+                <div className="p-4 lg:text-5xl md:text-3xl sm:text-2xl text-2xl text-center text-secondary mb-10 grid gap-4">
                     <p>Collect all your Quotes</p> 
                     <p>Anywhere</p>
                     <p>Anytime</p>
