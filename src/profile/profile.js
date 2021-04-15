@@ -69,8 +69,8 @@ class Profile extends React.Component {
         );
       }
       return (
-        <div>
-          <h1> Profile Page </h1>
+        <div className="my-3 w-full max-w-screen-lg container">
+           <div className="main-text mb-4">Profile</div>
           <h2>{this.state.profileData.username}</h2>
           <h3>{this.state.profileData.bio}</h3>
           <div>

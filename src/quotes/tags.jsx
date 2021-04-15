@@ -3,18 +3,22 @@ import React from 'react';
 function Tags({tags}){
     if (tags !== undefined){
         return (
-            tags.map(
-                (tag) =>
-                (
-                    <div key={tag.tagid}>{tag.tagname}</div>
+            <div className="flex flex-wrap space-between">
+            {
+                tags.map(
+                    (tag) =>
+                    (
+                        <div className="tag-box" key={tag.tagid}>{tag.tagname}</div>
+                    )
+    
                 )
-
-            )
+            }
+            </div>
         );
     }
     else{
         return (
-            <h3>Add some tags!!</h3>
+            <div className="main-text">Add some tags!!</div>
         );
     }
         

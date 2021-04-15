@@ -23,6 +23,14 @@
         @apply lg:text-3xl md:text-3xl sm:text-2xl text-2xl text-center font-semibold;
     }
 
+    .content-text{
+        @apply lg:text-2xl md:text-2xl sm:text-xl text-xl text-justify justify-self-start;
+    }
+
+    .author-text{
+        @apply lg:text-xl md:text-xl sm:text-xl text-xl justify-self-end;
+    }
+
     .success-msg{
         @apply p-4 border rounded-xl border-green-700 bg-green-100 text-center text-green-600;
     }
@@ -36,8 +44,11 @@
     }
 
     .label-text{
-        @apply block text-gray-700 text-sm font-bold mb-2
+        @apply block text-gray-700 text-sm font-bold mb-2;
     }
 
+    .tag-box{
+        @apply px-4 py-1 m-2 text-base font-semibold border shadow-md text-primary bg-white rounded-full hover:text-primaryDarker transition duration-300 ease-in-out
+    }
 }
 
