@@ -42,9 +42,9 @@ class SignUp extends React.Component{
     render() {
         return (
         <div>
-            <div className="w-full max-w-xs container p-4">
+            <div className="w-full max-w-lg container p-4">
             <p className="main-text">Create your account</p>
-            <form className="bg-background shadow-md rounded px-8 pt-6 pb-8 mb-4 mt-10">
+            <form className="form">
                 
                 <div className="mb-4">
                 <label className="label-text">
@@ -79,7 +79,7 @@ class SignUp extends React.Component{
                 </div>
             </form>
 
-            <div className="bg-background shadow-md rounded px-8 pt-4 pb-4 mb-4 mt-10 text-center text-lg font-semibold">
+            <div className="bg-background shadow-lg rounded px-8 pt-4 pb-4 mb-4 mt-10 text-center text-lg font-semibold">
                 <p>Already have an account? </p>
                 <Link className="text-primary" to="/login">Login Here</Link>
             </div>

@@ -20,15 +20,15 @@
     }
 
     .main-text{
-        @apply lg:text-3xl md:text-3xl sm:text-2xl text-2xl text-center font-semibold;
+        @apply lg:text-3xl md:text-3xl sm:text-2xl text-2xl text-center font-semibold pb-2 my-1;
     }
 
     .content-text{
-        @apply lg:text-2xl md:text-2xl sm:text-xl text-xl text-justify justify-self-start;
+        @apply text-xl text-center justify-self-start;
     }
 
     .author-text{
-        @apply lg:text-xl md:text-xl sm:text-xl text-xl justify-self-end;
+        @apply text-xl font-semibold justify-self-end;
     }
 
     .success-msg{
@@ -44,11 +44,20 @@
     }
 
     .label-text{
-        @apply block text-gray-700 text-sm font-bold mb-2;
+        @apply block text-gray-700 text-base font-bold mb-2;
     }
 
     .tag-box{
-        @apply px-4 py-1 m-2 text-base font-semibold border shadow-md text-primary bg-white rounded-full hover:text-primaryDarker transition duration-300 ease-in-out
+        @apply px-4 py-1 m-2 text-base font-semibold border shadow-md text-primary bg-white rounded-full hover:text-primaryDarker transition duration-300 ease-in-out;
     }
+
+    .form{
+        @apply bg-background shadow-lg rounded px-8 pt-6 pb-8 mb-4 mt-10;
+    }
+
+    .modal{
+        @apply form mx-auto border-2 border-secondary my-20 max-w-xl grid items-center justify-items-center shadow-xl focus:outline-none;
+    }
+
 }
 

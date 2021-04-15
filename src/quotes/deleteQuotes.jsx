@@ -31,7 +31,7 @@ class DeleteQuotesModal extends React.Component{
                 console.log(this.state.response);
             }
             else{
-                console.log("Fill all the text boxes");
+                this.setState({ response: {"error": "Some error occurred!"}})
             }
     }
 }
@@ -42,23 +42,44 @@ class DeleteQuotesModal extends React.Component{
         <ReactModal 
             isOpen={this.props.showModal}
             contentLabel="Delete Quotes modal"
+            className="modal"
             appElement={document.getElementById('root')}
         >
 
-        <button onClick={this.props.closeModal}>Close</button>
+            
         {
-            (this.state.response.hasOwnProperty("message") ||
-                this.state.response.hasOwnProperty("error"))
+            this.state.response.hasOwnProperty("message") 
             ? <ApiResponse response={this.state.response}/>
             :
             <div>
-                <h2>Are you sure want to delete this quote?</h2>
-                <div>
-                <p>"{this.props.deleteQuotesData.quote}" <br/> by {this.props.deleteQuotesData.author}</p>
-    
+            <div className="pt-4 pb-4 mb-1 mt-2">
+                <div className="main-text border-b-2 border-primary">
+                    Are you sure want to delete this quote?
                 </div>
-                <button onClick={this.deleteQuote}>Delete</button>
-                <button onClick={this.props.closeModal}>Cancel</button>
+                <div className="grid gap-y-2 p-4">
+                    <div className="content-text">"{this.props.deleteQuotesData.quote}"</div>
+                    <div className="author-text">- {this.props.deleteQuotesData.author}</div>
+                </div>
+    
+            
+            <div className="mt-4 pt-4 border-t-2 border-primary flex flex-row gap-2 justify-end">
+                <button className="square-btn flex flex-row gap-2 bg-green-500" type="submit"  onClick={this.deleteQuote}>
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Delete
+                </button>
+                
+                <button className="square-btn flex flex-row gap-2 bg-red-500" onClick={this.props.closeModal}>
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Cancel</button>
+            </div>
+            </div>
+            
+
+            {
+                this.state.response.hasOwnProperty("error") ?
+                <ApiResponse response={this.state.response}/>
+                : null
+            }
             </div>
         }
         

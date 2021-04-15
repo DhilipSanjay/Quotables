@@ -54,7 +54,7 @@ class InsertQuotesModal extends React.Component{
                 console.log(this.state.response);
             }
             else{
-                console.log("Fill all the text boxes");
+                this.setState({ response: {"error": "Fill out all the fields!"}})
             }
         }
     }
@@ -64,38 +64,56 @@ class InsertQuotesModal extends React.Component{
             <ReactModal 
                 isOpen={this.props.showModal}
                 contentLabel="Insert Quotes modal"
+                className="modal"
                 appElement={document.getElementById('root')}
             >
-            <button onClick={this.props.closeModal}>Close</button>
             {
-                (this.state.response.hasOwnProperty("message") ||
-                    this.state.response.hasOwnProperty("error"))
+                this.state.response.hasOwnProperty("message")
                 ? <ApiResponse response={this.state.response}/>
                 :
                 <div>
-                    <h1>Insert Quotes</h1>
-                    <form>
-                        <label>Quote</label>
-                        <input type="text" name="quote" placeholder="Quote" onChange={this.onChange} required/>
+                    <div className="main-text border-b-2 border-primary">Add Quote</div>
+                    <form className="pt-4 pb-4 mb-1 mt-2">
+                        <label className="label-text">Quote</label>
+                        <textarea className="text-box" type="text" name="quote" placeholder="Quote" onChange={this.onChange} maxlength="200" required/>
                         <br/>
-                        <label>Author</label>
-                        <input type="text" name="author" placeholder="Author" onChange={this.onChange} required/>
+                        <label className="label-text">Author</label>
+                        <input className="text-box" type="text" name="author" placeholder="Author" onChange={this.onChange} required/>
                         <br/>
-                        <ul className="tag-list">
+                        <ul className="tag-list flex flex-wrap space-between">
                         {
                             this.state.tags.map((tag, index) =>
-                            <li key={index}>
+                            <li className="tag-box" key={index}>
                             {tag}
                             </li>
                             )
                         }
                         </ul>
-                        <label>Tag</label>
-                        <input type="text" className="tagInput" name="tagInput" placeholder="Tag" onChange={this.onChange}/>
-                        <button onClick={this.addTagInput}>Add Tag</button>
-                        <br />
-                        <input type="submit" value="Save Quote" onClick={this.saveQuote}/>
+                        <label className="label-text">Tag</label>
+                        
+                        <div className="grid grid-cols-3 gap-2">
+                            <input className="tagInput text-box m-0 col-span-2" type="text" name="tagInput" placeholder="Tag" onChange={this.onChange}/>
+                            <button className="square-btn flex flex-row gap-2" onClick={this.addTagInput}>
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            Add
+                            </button>
+                        </div>
+                        <div className="mt-8 pt-4 border-t-2 border-primary flex flex-row gap-2 justify-end">
+                            <button className="square-btn flex flex-row gap-2 bg-green-500" type="submit"  onClick={this.saveQuote}>
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            Save
+                            </button>
+                            
+                            <button className="square-btn flex flex-row gap-2 bg-red-500" onClick={this.props.closeModal}>
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            Close</button>
+                        </div>
                     </form>
+                    {
+                        this.state.response.hasOwnProperty("error") ?
+                        <ApiResponse response={this.state.response}/>
+                        : null
+                    }
                 </div>
             }
             </ReactModal>

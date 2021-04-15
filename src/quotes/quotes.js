@@ -80,10 +80,10 @@ class Quote extends React.Component {
 
       return (
       <div className="grid lg:grid-cols-3 grid-cols-1 text-center">
-      <div class="my-3 w-full max-w-screen-lg container col-span-2 lg:border-r-2 border-secondary">
+      <div className="my-3 w-full max-w-screen-lg container col-span-2 lg:border-r-2 border-secondary">
           <div className="main-text mb-4">Quotes</div>
           <div className="m-4">
-            <button className="square-btn" onClick={this.openInsertModal}>Insert Quotes</button>
+            <button className="square-btn" onClick={this.openInsertModal}>Add Quotes</button>
             <InsertQuotesModal showModal={this.state.showInsertModal} closeModal={this.closeModal} />
             <DeleteQuotesModal deleteQuotesData={this.state.deleteQuotesData} showModal={this.state.showDeleteModal} closeModal={this.closeModal} />
             <EditQuotesModal editQuotesData={this.state.editQuotesData} showModal={this.state.showEditModal} closeModal={this.closeModal} />
@@ -98,7 +98,7 @@ class Quote extends React.Component {
                   (quote,i) => (
                   <div className="grid gap-y-2 border-4 rounded-xl border-primary p-4" key={i}>
                     <div className="content-text">{quote.quote}</div>
-                    <div className="author-text">-{quote.author}</div>
+                    <div className="author-text">- {quote.author}</div>
                     <div>
                       
                     <Tags tags={quote.tags} />

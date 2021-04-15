@@ -69,20 +69,38 @@ class Profile extends React.Component {
         );
       }
       return (
-        <div className="my-3 w-full max-w-screen-lg container">
-           <div className="main-text mb-4">Profile</div>
-          <h2>{this.state.profileData.username}</h2>
-          <h3>{this.state.profileData.bio}</h3>
-          <div>
-            Quotes {this.state.profileData.quotesCount}
+        <div className="my-3 mx-auto w-full max-w-screen-lg container grid gap-y-4 justify-items-center">
+         <div className="main-text mb-4">Profile</div>
+          <div className="bg-secondary text-white text-6xl font-semibold rounded-full h-12 w-12 flex items-center justify-center p-16">
+            DS
+            </div>
+
+          <div className="main-text">{this.state.profileData.username}</div>
+          <div className="content-text justify-self-center font-semibold">{this.state.profileData.bio}</div>
+          
+          <div className="grid grid-cols-2 gap-4 justify-items-end">
+          <div className="main-text">
+            <p>{this.state.profileData.quotesCount}</p>
+            <strong>Quotes</strong> 
           </div>
-          <div>
-            Tags {this.state.profileData.tagsCount}
+          <div className="main-text">
+            <p>{this.state.profileData.tagsCount}</p>
+            <strong>Tags</strong>
+          </div>
           </div>
           <EditProfileModal editProfileData={this.state.profileData} showModal={this.state.showEditModal} closeModal={this.closeModal}/>
           <ChangePasswordModal editProfileData={this.state.profileData} showModal={this.state.showChangePasswordModal} closeModal={this.closeModal}/>
-          <button onClick={this.openEditModal}>Edit Profile</button>
-          <button onClick={this.openChangePasswordModal}>Change Password</button>
+          <div className="flex flex-row gap-2 justify-center">
+            <button className="square-btn flex flex-row gap-2" onClick={this.openEditModal}>
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+              Edit Profile
+            </button>
+            
+            <button className="square-btn flex flex-row gap-2" onClick={this.openChangePasswordModal}>
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+              Change Password
+            </button>
+          </div>
         </div>
       );
     }

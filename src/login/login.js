@@ -48,9 +48,9 @@ class Login extends React.Component{
 
         return (
         <div>
-            <div className="w-full max-w-xs container p-4">
+            <div className="w-full max-w-lg container p-4">
             <p className="main-text">Login to Quotables</p>
-            <form className="bg-background shadow-md rounded px-8 pt-6 pb-8 mb-4 mt-10">
+            <form className="form">
                 <div className="mb-4">
                 <label className="label-text">
                     Email
@@ -70,7 +70,7 @@ class Login extends React.Component{
             <ApiResponse response={this.state.response}/>
             
 
-            <div className="bg-background shadow-md rounded px-8 pt-4 pb-4 mb-4 mt-10 text-center text-lg font-semibold">
+            <div className="bg-background shadow-lg rounded px-8 pt-4 pb-4 mb-4 mt-10 text-center text-lg font-semibold">
                 <p>Don't have an account? </p>
                 <Link className="text-primary" to="/signup">Sign Up</Link>
             </div>
