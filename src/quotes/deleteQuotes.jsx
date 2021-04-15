@@ -11,7 +11,8 @@ class DeleteQuotesModal extends React.Component{
         this.deleteQuote = this.deleteQuote.bind(this);
     }
 
-    async deleteQuote(){
+    async deleteQuote(e){
+        e.preventDefault();
         if(Auth.isAuthenticated()){
             // Check if qid, quote and author are not empty 
             // No need to send tags, because it is set to on delete cascade.
@@ -28,7 +29,7 @@ class DeleteQuotesModal extends React.Component{
 
                 const postResponse = await PostData('quotes/deleteQuotes.php', token, userData);
                 this.setState({ response: postResponse})
-                console.log(this.state.response);
+                setTimeout(() => this.props.closeModal(), 2000);
             }
             else{
                 this.setState({ response: {"error": "Some error occurred!"}})
@@ -45,7 +46,6 @@ class DeleteQuotesModal extends React.Component{
             className="modal"
             appElement={document.getElementById('root')}
         >
-
             
         {
             this.state.response.hasOwnProperty("message") 
@@ -63,12 +63,12 @@ class DeleteQuotesModal extends React.Component{
     
             
             <div className="mt-4 pt-4 border-t-2 border-primary flex flex-row gap-2 justify-end">
-                <button className="square-btn flex flex-row gap-2 bg-green-500" type="submit"  onClick={this.deleteQuote}>
+                <button className="green-btn" type="submit"  onClick={this.deleteQuote}>
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 Delete
                 </button>
                 
-                <button className="square-btn flex flex-row gap-2 bg-red-500" onClick={this.props.closeModal}>
+                <button className="red-btn" onClick={this.props.closeModal}>
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 Cancel</button>
             </div>

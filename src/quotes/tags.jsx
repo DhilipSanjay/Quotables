@@ -1,7 +1,13 @@
 import React from 'react';
+import ApiResponse from '../common/apiResponse';
 
 function Tags({tags}){
-    if (tags !== undefined){
+    if (tags.hasOwnProperty("message")){
+        return (
+            <ApiResponse response={tags}/>
+        );
+    }
+    else{
         return (
             <div className="flex flex-wrap space-between">
             {
@@ -14,11 +20,6 @@ function Tags({tags}){
                 )
             }
             </div>
-        );
-    }
-    else{
-        return (
-            <div className="main-text">Add some tags!!</div>
         );
     }
         

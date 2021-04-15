@@ -17,7 +17,8 @@ class ChangePasswordModal extends React.Component{
         this.onChange = this.onChange.bind(this);
     }
 
-    async changePassword(){
+    async changePassword(e){
+        e.preventDefault();
         if(Auth.isAuthenticated()){
             // Check if passwords are not empty
             // Check newpassword equals confirmpassword
@@ -39,10 +40,10 @@ class ChangePasswordModal extends React.Component{
                     confirmpassword: ''
                 })
                 this.setState({ response: postResponse})
-                console.log(this.state.response);
+                setTimeout(() => this.props.closeModal(), 3000);
             }
             else{
-                console.log("Fill all the fields / Passwords don't match");
+                this.setState({ response: {"error" : "Fill all the fields / Passwords don't match"}})
             }
         }
     }
@@ -56,33 +57,44 @@ class ChangePasswordModal extends React.Component{
 
         if( this.state.newpassword && this.state.confirmpassword) {
             passwordMatch=  (this.state.newpassword !== this.state.confirmpassword)
-                ? <p>Passwords don't match</p>
-                : <p>Passwords match!</p>
+                ? <ApiResponse response={{"error": "Passwords don't match!"}} />
+                : <ApiResponse response={{"message": "Passwords match!"}} />
         }
         return(
             <ReactModal 
                 isOpen={this.props.showModal}
-                contentLabel="Insert Quotes modal"
+                contentLabel="Change Password modal"
+                className="modal"
                 appElement={document.getElementById('root')}
-            >
-            <button onClick={this.props.closeModal}>Close</button>
-            
-            <h1>Change Password</h1>
-            <h2>{this.props.editProfileData.username}</h2>
-            <form>
-                <label>Old Password</label>
-                <input type="password" name="oldpassword" placeholder="Old Password" onChange={this.onChange} required/>
+            >            
+           <div>
+            <div className="main-text mb-4 border-b-2 border-primary">Change Password</div>
+            <div className="main-text">{this.props.editProfileData.username}</div>
+            <form className="pt-4 pb-4 mb-1 mt-2">
+                <label className="label-text">Old Password</label>
+                <input className="text-box" type="password" name="oldpassword" placeholder="Old Password" onChange={this.onChange} required/>
                 <br/>
-                <label>New Password</label>
-                <input type="password" name="newpassword" placeholder="New Password" onChange={this.onChange} required/>
+                <label className="label-text">New Password</label>
+                <input className="text-box" type="password" name="newpassword" placeholder="New Password" onChange={this.onChange} required/>
                 <br/>
-                <label>Confirm Password</label>
-                <input type="password" name="confirmpassword" placeholder="Confirm Password" onChange={this.onChange} required/>
+                <label className="label-text">Confirm Password</label>
+                <input className="text-box" type="password" name="confirmpassword" placeholder="Confirm Password" onChange={this.onChange} required/>
                 <br/>
                 {passwordMatch}
-                <input type="submit" value="Change Password" onClick={this.changePassword}/>
+                
+                <div className="mt-4 pt-4 border-t-2 border-primary flex flex-row gap-2 justify-end">
+                    <button className="green-btn" type="submit"  onClick={this.changePassword}>
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    Change Password
+                    </button>
+                
+                    <button className="red-btn" onClick={this.props.closeModal}>
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    Close</button>
+                    </div>
             </form>
             <ApiResponse response={this.state.response}/>
+            </div>
             </ReactModal>
         )
     }

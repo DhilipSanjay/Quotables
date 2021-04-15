@@ -15,7 +15,8 @@ class EditProfileModal extends React.Component{
         this.onChange = this.onChange.bind(this);
     }
 
-    async editProfile(){
+    async editProfile(e){
+        e.preventDefault();
         if(Auth.isAuthenticated()){
             // Check if newbio not empty 
             if (this.state.newbio){
@@ -27,11 +28,11 @@ class EditProfileModal extends React.Component{
                 userData.newbio = this.state.newbio;
 
                 const postResponse = await PostData('profile/editProfile.php', token, userData);
-                this.setState({ response: postResponse})
-                console.log(this.state.response);
+                this.setState({ response: postResponse});
+                setTimeout(() => this.props.closeModal(), 3000);
             }
             else{
-                console.log("Fill all the text boxes");
+                this.setState({ response: {"error": "Fill out all the fields!"}});
             }
         }
     }
@@ -72,12 +73,12 @@ class EditProfileModal extends React.Component{
                 <br/>
                 
                 <div className="mt-4 pt-4 border-t-2 border-primary flex flex-row gap-2 justify-end">
-                <button className="square-btn flex flex-row gap-2 bg-green-500" type="submit"  onClick={this.editProfile}>
+                <button className="green-btn" type="submit"  onClick={this.editProfile}>
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 Edit
                 </button>
                 
-                <button className="square-btn flex flex-row gap-2 bg-red-500" onClick={this.props.closeModal}>
+                <button className="red-btn" onClick={this.props.closeModal}>
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 Close</button>
                 </div>

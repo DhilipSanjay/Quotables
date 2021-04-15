@@ -18,6 +18,8 @@ class EditQuotesModal extends React.Component{
     }
 
     async editQuote(e){
+        e.preventDefault();
+
         if(Auth.isAuthenticated()){
             // Check if qid, newquote, newauthor, oldquote and oldauthor are not empty 
             if (this.props.editQuotesData.qid
@@ -37,10 +39,10 @@ class EditQuotesModal extends React.Component{
 
                 const postResponse = await PostData('quotes/editQuotes.php', token, userData);
                 this.setState({ response: postResponse})
-                console.log(this.state.response);
+                setTimeout(() => this.props.closeModal(), 2000);
             }
             else{
-                console.log("Fill all the text boxes");
+                this.setState({ response: {"error": "Fill out all the fields!"}});
             }
         }
     }
@@ -79,12 +81,12 @@ class EditQuotesModal extends React.Component{
                 <br/>
                 <Tags tags={this.props.editQuotesData.tags} />
                 <div className="mt-4 pt-4 border-t-2 border-primary flex flex-row gap-2 justify-end">
-                <button className="square-btn flex flex-row gap-2 bg-green-500" type="submit"  onClick={this.editQuote}>
+                <button className="green-btn" type="submit"  onClick={this.editQuote}>
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 Save Changes
                 </button>
                 
-                <button className="square-btn flex flex-row gap-2 bg-red-500" onClick={this.props.closeModal}>
+                <button className="red-btn" onClick={this.props.closeModal}>
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 Close</button>
             </div>

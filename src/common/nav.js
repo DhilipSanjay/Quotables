@@ -5,7 +5,7 @@ import Auth from '../services/auth';
 
 const Nav = ({toggle}) => {
         return(
-            <nav className="flex justify-between items-center h-16 bg-background text-foreground text-2xl relative shadow-sm border-b-2 border-primary foot-mono">
+            <nav className="flex justify-between items-center h-16 bg-background text-secondary text-2xl relative shadow-sm border-b-2 border-primary foot-mono">
             <Link className="p-4" to="/">
             <strong>Quotables</strong>
             </Link>

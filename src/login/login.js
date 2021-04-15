@@ -28,17 +28,16 @@ class Login extends React.Component{
                 this.props.history.push("/quotes");
             }
             else{
-                this.setState({ response: postResponse})
+                this.setState({ response: postResponse});
             }
         }
         else{
-            this.setState({ response: {"error": "Fill out all the fields!"}})
+            this.setState({ response: {"error": "Fill out all the fields!"}});
         }        
     }
 
     onChange(e){
-        this.setState({[e.target.name]: e.target.value})
-        // console.log(this.state);
+        this.setState({[e.target.name]: e.target.value});
     }
 
     render() {
@@ -49,7 +48,7 @@ class Login extends React.Component{
         return (
         <div>
             <div className="w-full max-w-lg container p-4">
-            <p className="main-text">Login to Quotables</p>
+            <div className="main-text">Login to Quotables</div>
             <form className="form">
                 <div className="mb-4">
                 <label className="label-text">
@@ -68,7 +67,6 @@ class Login extends React.Component{
                 </div>
             </form>
             <ApiResponse response={this.state.response}/>
-            
 
             <div className="bg-background shadow-lg rounded px-8 pt-4 pb-4 mb-4 mt-10 text-center text-lg font-semibold">
                 <p>Don't have an account? </p>

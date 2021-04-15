@@ -1,6 +1,7 @@
 import React from 'react';
 import Auth from '../services/auth';
 import { Link } from 'react-router-dom';
+import ApiResponse from '../common/apiResponse';
 
 class SignUp extends React.Component{
     constructor(props){
@@ -9,7 +10,8 @@ class SignUp extends React.Component{
             email : '',
             username : '',
             password: '',
-            bio: ''
+            bio: '',
+            response: {}
         }
         this.signup = this.signup.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -19,24 +21,39 @@ class SignUp extends React.Component{
         this.setState({[e.target.name]: e.target.value});
     }
 
-    async signup(){
+    async signup(e){
+        e.preventDefault();
         if( this.state.email 
             && this.state.password
             && this.state.username 
             && this.state.bio){
-            if(await Auth.signup(this.state))
+            
+            e.preventDefault();
+            let userData = {};
+            userData.email = this.state.email;
+            userData.password = this.state.password;
+            userData.username = this.state.username;
+            userData.bio = this.state.bio;
+
+            if(await Auth.signup(userData))
             {
-                console.log("Successfully registered... redirecting to login page");
-                this.props.history.push("/login");
+                this.setState({response: {"message": "Registered Successfully"}});
+                setTimeout(() => {this.props.history.push("/login")}, 3000);
             }
             else{
-                console.log("Some error occurred. Try again");
+                this.setState({ response: {"error": "Some error Occurred. Try again!"}});
             }
                
         }
         else{
-            console.log("Fill all the text boxes");
-        }  
+            this.setState({ response: {"error": "Fill out all the fields!"}});
+        }
+        this.setState({
+            email: '',
+            password: '',
+            username: '',
+            bio: ''
+        });
     }
 
     render() {
@@ -78,6 +95,7 @@ class SignUp extends React.Component{
                 <input className="square-btn" type="submit" value="Sign Up" onClick={this.signup} />
                 </div>
             </form>
+            <ApiResponse response={this.state.response}/>
 
             <div className="bg-background shadow-lg rounded px-8 pt-4 pb-4 mb-4 mt-10 text-center text-lg font-semibold">
                 <p>Already have an account? </p>
