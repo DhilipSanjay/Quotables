@@ -37,8 +37,8 @@ $Tags = new Tags($conn);
 if($data){
    try{
       $uid = $data->uid;
-      $username = mysqli_real_escape_string($conn, filter_var($data->username));
-      $email = mysqli_real_escape_string($conn, filter_var($data->email));
+      $username = $data->username;
+      $email = $data->email;
       
       // Verify JWT token
       if($Auth->verifyToken($uid, $username, $email)){

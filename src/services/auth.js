@@ -7,7 +7,7 @@ class Auth{
 
     async signup(userDetails){
         let responseJSON;
-        const isRegistered = await PostCredentials('signup.php', userDetails).then((result) => {
+        await PostCredentials('signup.php', userDetails).then((result) => {
             responseJSON = result;
             console.log(responseJSON);
             this.authenticated = false;

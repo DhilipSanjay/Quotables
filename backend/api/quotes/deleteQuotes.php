@@ -29,11 +29,11 @@ $Tags = new Tags($conn);
 if($data){
     try{
         $uid = $data->uid;
-        $username = mysqli_real_escape_string($conn, filter_var($data->username));
-        $email = mysqli_real_escape_string($conn, filter_var($data->email));
+        $username =$data->username;
+        $email = $data->email;
         $qid = $data->qid;        
-        $quote = mysqli_real_escape_string($conn, filter_var($data->quote));
-        $author = mysqli_real_escape_string($conn, filter_var($data->author));
+        $quote = $data->quote;
+        $author = $data->author;
         // Verify JWT token
         if($Auth->verifyToken($uid, $username, $email)){
             // Check if the quote exists in database and it belongs to the authorized user

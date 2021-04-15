@@ -27,10 +27,10 @@ $Profile = new Profile($conn);
 if($data){
     try{
         // Sanitize the user inputs
-        $email = mysqli_real_escape_string($conn, filter_var($data->email, FILTER_SANITIZE_STRING));
+        $email = filter_var($data->email, FILTER_SANITIZE_EMAIL);
         $password = md5($data->password);
-        $username = mysqli_real_escape_string($conn,filter_var($data->username, FILTER_SANITIZE_STRING));
-        $bio = mysqli_real_escape_string($conn,filter_var($data->bio, FILTER_SANITIZE_STRING));
+        $username = $data->username;
+        $bio = $data->bio;
         
         if($Auth->checkEmail($email)){
             // Not registered -> register by creating profile.

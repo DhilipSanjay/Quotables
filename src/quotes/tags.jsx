@@ -2,6 +2,7 @@ import React from 'react';
 import ApiResponse from '../common/apiResponse';
 
 function Tags({tags}){
+    if(tags){
     if (tags.hasOwnProperty("message")){
         return (
             <ApiResponse response={tags}/>
@@ -22,6 +23,8 @@ function Tags({tags}){
             </div>
         );
     }
+    }
+    return null;
         
 }
 

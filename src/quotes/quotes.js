@@ -96,7 +96,7 @@ class Quote extends React.Component {
               {
                 this.state.quotesdata.map(
                   (quote,i) => (
-                  <div className="grid gap-y-2 border-4 rounded-xl border-primary p-4" key={i}>
+                  <div className="grid gap-y-2 border-2 rounded-xl border-primary p-4" key={i}>
                     <div className="content-text">{quote.quote}</div>
                     <div className="author-text">- {quote.author}</div>
                     <div>

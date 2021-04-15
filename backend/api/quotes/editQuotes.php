@@ -29,14 +29,14 @@ $Tags = new Tags($conn);
 if($data){
     try{
         $uid = $data->uid;
-        $username = mysqli_real_escape_string($conn, filter_var($data->username));
-        $email = mysqli_real_escape_string($conn, filter_var($data->email));
+        $username = $data->username;
+        $email =$data->email;
         $qid = $data->qid;
-        $oldquote = mysqli_real_escape_string($conn, filter_var($data->oldquote));
-        $oldauthor = mysqli_real_escape_string($conn, filter_var($data->oldauthor));
-        $newquote = mysqli_real_escape_string($conn, filter_var($data->newquote));
-        $newauthor = mysqli_real_escape_string($conn, filter_var($data->newauthor));
-
+        $oldquote = $data->oldquote;
+        $oldauthor = $data->oldauthor;
+        $newquote = $data->newquote;
+        $newauthor = $data->newauthor;
+        
         // Verify JWT token
         if($Auth->verifyToken($uid, $username, $email)){
             // Check if the quote exists in database and it belongs to the authorized user

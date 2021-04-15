@@ -31,8 +31,8 @@ $Profile = new Profile($conn);
 if($data){
    try{
       $uid = $data->uid;
-      $username = mysqli_real_escape_string($conn, filter_var($data->username));
-      $email = mysqli_real_escape_string($conn, filter_var($data->email));
+      $username = $data->username;
+      $email = $data->email;
       $oldpasswd = md5($data->oldpassword);
       $newpasswd = md5($data->newpassword);
 

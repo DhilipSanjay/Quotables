@@ -22,7 +22,7 @@ $Auth = new Auth($conn);
 if($data){
     try{
         // Sanitize the user inputs   
-        $email = mysqli_real_escape_string($conn, filter_var($data->email, FILTER_SANITIZE_STRING));
+        $email = filter_var($data->email, FILTER_SANITIZE_EMAIL);
         $passwd = md5($data->password);
         
         // Verify email id and password

@@ -31,14 +31,14 @@ $Profile = new Profile($conn);
 if($data){
    try{
       $uid = $data->uid;
-      $username = mysqli_real_escape_string($conn, filter_var($data->username));
-      $email = mysqli_real_escape_string($conn, filter_var($data->email));
-      $bio = mysqli_real_escape_string($conn, filter_var($data->bio));
+      $username = $data->username;
+      $email = $data->email;
+      $bio = $data->bio;
       
       // Users can change their bio only
       // Changing username requires reissue of JWT token
       // Or the user must be logged out after changing username
-      $newbio = mysqli_real_escape_string($conn, filter_var($data->newbio));
+      $newbio = $data->newbio;
 
       // Verify JWT token
       if($Auth->verifyToken($uid, $username, $email)){
