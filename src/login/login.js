@@ -44,13 +44,29 @@ class Login extends React.Component{
         return (
         <div>
             <Nav />
-            <h2>Login</h2>
-            <label>Email</label>
-            <input type="text" name="email" placeholder="Email" onChange={this.onChange}/>
-            <label>Password</label>
-            <input type="password" name="password" placeholder="Password" onChange={this.onChange}/>
-            <input type="submit" value="Login" onClick={this.login}/>
+            <div className="w-full max-w-xs container p-4">
+            <p className="main-text">Login to Quotables</p>
+            <form className="bg-background shadow-md rounded px-8 pt-6 pb-8 mb-4 mt-10">
+                <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                    Email
+                </label>
+                <input className="shadow appearance-none border-primary border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="email" type="email" placeholder="Email" onChange={this.onChange} required/>
+                </div>
+                <div className="mb-6">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                    Password
+                </label>
+                <input className="shadow appearance-none border border-primary rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" name="password" type="password" placeholder="Password"  onChange={this.onChange} required/>
+                </div>
+                <div className="flex items-center justify-center">
+                <button className="bg-primary hover:bg-primaryDarker text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onClick={this.login}>
+                    Login
+                </button>
+                </div>
+            </form>
             <ApiResponse response={this.state.response}/>
+            </div>
         </div>
         );
     }

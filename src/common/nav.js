@@ -5,38 +5,43 @@ import Auth from '../services/auth';
 
 const Nav = () => {
         return(
-            <nav>
-            <Link to="/quotes">
-            <h2>Quotables</h2>
+            <nav className="flex justify-between items-center h-16 bg-background text-foreground text-2xl relative shadow-sm border-b-2 border-primary foot-mono">
+            <Link className="p-4" to="/">
+            <strong>Quotables</strong>
             </Link>
             
-            <ul className="nav-links">
+            <div className="px-4 cursor-pointer md:hidden">
+            {/* Menu bar */}
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+            </div>
+            <div className="pr-8 md:block hidden">
+                {
+                Auth.isAuthenticated() && 
+                <Link className="p-4" to="/profile">
+                Profile
+                </Link>
+                } 
+
                 {
                     Auth.isAuthenticated() && 
-                    <Link to="/profile">
-                    <li>Profile</li>
-                    </Link>
-                }
-                {
-                    Auth.isAuthenticated() && 
-                    <li onClick={() => {
+                    <span className="p-4" onClick={() => {
                         Auth.logout();
                         window.location.reload();
-                    }}>Logout</li>
+                    }}>Logout</span>
                 }
                 {
                     !Auth.isAuthenticated() &&
-                    <Link to="/login">
-                    <li>Login</li>
+                    <Link className="small-btn" to="/login">
+                    Login
                     </Link>
                 }
                 {
                     !Auth.isAuthenticated() && 
-                    <Link to="/signup">
-                    <li>Sign Up</li>
+                    <Link className="small-btn" to="/signup">
+                    Sign Up
                     </Link>
                 }
-            </ul>
+            </div> 
             </nav>
        );
 }

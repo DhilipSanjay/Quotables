@@ -4,7 +4,7 @@ const ApiResponse = (props) => {
     // Green Message
     if(props.response.hasOwnProperty("message")){
         return(
-            <div>
+            <div className="success-msg">
                 <p>{props.response.message}</p>
             </div>
         );
@@ -13,7 +13,7 @@ const ApiResponse = (props) => {
     // Red Error
     if(props.response.hasOwnProperty("error")){
         return(
-            <div>
+            <div className="error-msg">
                 <p>{props.response.error}</p>
             </div>
         );

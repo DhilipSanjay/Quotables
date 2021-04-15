@@ -1,55 +1,31 @@
-.App {
-  text-align: center;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components{
+    .main-btn{
+        @apply py-6 px-10 bg-primary rounded-full lg:text-3xl md:text-2xl sm:text-2xl text-2xl hover:bg-primaryDarker transition duration-300 ease-in-out flex items-start animate-bounce;
+    }
+
+    .small-btn{
+        @apply p-2 mx-2 text-lg bg-primary rounded-full hover:bg-primaryDarker transition duration-300 ease-in-out; ;
+    }
+
+    .title{
+        @apply lg:text-8xl md:text-6xl sm:text-4xl text-4xl font-black mb-10;
+    }
+
+    .main-text{
+        @apply lg:text-3xl md:text-3xl sm:text-2xl text-2xl text-center;
+    }
+
+    .success-msg{
+        @apply p-4 border rounded-xl border-green-700 bg-green-100 text-center text-green-600;
+    }
+
+    .error-msg{
+        @apply p-4 border rounded-xl border-red-700 bg-red-100 text-center text-red-600;
+    }
+
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-
-nav{
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  min-height: 10vh;
-  background-color: #61dafb;
-}
-
-.nav-links{
-  list-style: none;
-  width: 40%;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
